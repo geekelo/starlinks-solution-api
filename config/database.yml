@@ -18,6 +18,9 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: localhost
+  username: 'geekelo'
+  password: 'geekelo'
 
 development:
   <<: *default
@@ -79,6 +82,7 @@ test:
 #
 production:
   <<: *default
+  url: <%= ENV["DATABASE_URL"] %>
   database: starlinks_solution_api_production
   username: starlinks_solution_api
   password: <%= ENV["STARLINKS_SOLUTION_API_DATABASE_PASSWORD"] %>
