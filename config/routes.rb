@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       post "/signup", to: "registration#create"
       post "/login", to: "authentication#create"
+
+      resources :password_resets, only: [:create, :update]
     end
   end
 
