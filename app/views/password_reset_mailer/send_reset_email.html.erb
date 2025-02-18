@@ -1,0 +1,5 @@
+<h1>Password Reset Instructions</h1>
+<p>Hello <%= @user.name %>,</p>
+<p>Click the link below to reset your password:</p>
+<a href="<%= ENV['FRONTEND_URL'] %>/reset-password?token=<%= @token %>">Reset Password</a>
+<p>This link expires in 2 hours.</p>
