@@ -1,7 +1,7 @@
 class StarlinkUser < ApplicationRecord
   has_secure_password
 
-  include EmailConfirmationsHelper
-  include PasswordResetsHelper
+  include Api::V1::EmailConfirmationsHelper
+  include Api::V1::PasswordResetsHelper
    
 end
