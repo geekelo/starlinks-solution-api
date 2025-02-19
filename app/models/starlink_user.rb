@@ -8,9 +8,16 @@ class StarlinkUser < ApplicationRecord
   def generate_confirmation_token
     self.confirmation_token = SecureRandom.hex(20)
     self.confirmation_sent_at = Time.current
-    save!
-    confirmation_token
+  
+    if save
+      Rails.logger.info "Confirmation token saved: #{confirmation_token}"
+      confirmation_token # Return the token
+    else
+      Rails.logger.error "Failed to save confirmation token: #{errors.full_messages}"
+      nil
+    end
   end
+  
 
   def confirmation_token_valid?
     confirmation_sent_at && confirmation_sent_at > 2.hours.ago
