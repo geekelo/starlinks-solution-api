@@ -70,3 +70,5 @@ gem 'active_model_serializers'
 gem 'bcrypt'
 gem 'jwt'
 gem 'rack-cors'
+
+gem "twilio-ruby", "~> 7.4"
