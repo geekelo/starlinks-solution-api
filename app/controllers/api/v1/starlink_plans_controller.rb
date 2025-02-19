@@ -1,4 +1,4 @@
-class Api::V1::StarlinkPlansController < ActionController
+class Api::V1::StarlinkPlansController < ApplicationController
   def index
     plans = StarlinkPlan.all
     render json: plans
