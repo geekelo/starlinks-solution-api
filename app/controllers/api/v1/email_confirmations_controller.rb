@@ -11,7 +11,7 @@ class Api::V1::EmailConfirmationsController < ApplicationController
     end
   end
 
-  def update
+  def confirm_user_email
     user = StarlinkUser.find_by(confirmation_token: params[:token])
 
     if user && user.confirmation_token_valid?
