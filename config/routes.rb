@@ -13,7 +13,7 @@ Rails.application.routes.draw do
       resources :password_resets, only: [:create, :update]
       resources :email_confirmations do
         collection do
-          post :confirm_user_email
+          put :confirm_user_email
         end
       end
       resources :whatsapp_confirmations, only: [:create, :update]
