@@ -1,0 +1,5 @@
+<h1>Email Confirmation Instructions</h1>
+<p>Hello <%= @user.name %>,</p>
+<p>Click the link below to confirm your email:</p>
+<a href="<%= ENV['FRONTEND_URL'] %>/home?token=<%= @token %>">Confirm Email</a>
+<p>This link expires in 2 hours.</p>

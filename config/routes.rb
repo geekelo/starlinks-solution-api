@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       post "/login", to: "authentication#create"
 
       resources :password_resets, only: [:create, :update]
+      resources :email_confirmations, only: [:create, :update]
     end
   end
 
