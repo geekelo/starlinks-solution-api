@@ -16,7 +16,7 @@ module Api::V1::WhatsappConfirmationsHelper
 
   def confirm_whatsapp_number(submitted_token)
     if whatsapp_confirmation_token_valid? && submitted_token == whatsapp_confirmation_token
-      update(whatsapp_confirmed: true, whatsapp_confirmation_token: nil, whatsapp_confirmation_sent_at: nil)
+      update(whatsapp_number_confirmed: true, whatsapp_confirmation_token: nil, whatsapp_confirmation_sent_at: nil)
       true
     else
       false
