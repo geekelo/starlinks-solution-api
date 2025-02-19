@@ -17,7 +17,7 @@ class Api::V1::RegistrationController < ApplicationController
   private
 
   def signup_params
-    params.require(:starlink_user).permit(:email, :password, :phone_number, :name, :whatsapp_number, :confirm_password)
+    params.require(:starlink_user).permit(:email, :password, :phone_number, :name, :whatsapp_number, :password_confirmation)
   end
 
   def email_exists(email)
