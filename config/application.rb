@@ -1,7 +1,7 @@
 require_relative "boot"
 
 require "rails/all"
-require 'dotenv/load' if Rails.env.development? || Rails.env.test?
+# require 'dotenv/load' if Rails.env.development? || Rails.env.test?
 
 
 # Require the gems listed in Gemfile, including any gems

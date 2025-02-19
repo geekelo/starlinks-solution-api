@@ -7,3 +7,14 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+# db/seeds.rb
+
+StarlinkPlan.create!(
+  id: SecureRandom.uuid,
+  name: "Enterprise Plan",
+  price: 120_000.00,
+  status: "default"
+)
+
+puts "✅ Starlink Enterprise Plan seeded successfully!"
