@@ -4,7 +4,7 @@ class Api::V1::EmailConfirmationsController < ApplicationController
     
     if user
       token = user.generate_confirmation_token
-      ConfirmEmailMailer.send_confirmation_email(user, token).deliver_now
+      ConfirmationEmailMailer.send_confirmation_email(user, token).deliver_now
       render json: { message: "Email confirmatiom instructions sent to #{user.email}" }, status: :ok
     else
       render json: { error: 'Email not found' }, status: :not_found
