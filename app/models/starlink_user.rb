@@ -1,9 +1,11 @@
 class StarlinkUser < ApplicationRecord
-  has_secure_password
+
 
   # include Api::V1::EmailConfirmationsHelper
   include Api::V1::PasswordResetsHelper
   include Api::V1::WhatsappConfirmationsHelper
+  has_secure_password
+  before_create :generate_confirmation_token
 
   def generate_confirmation_token
     self.confirmation_token = SecureRandom.hex(20)
@@ -24,7 +26,10 @@ class StarlinkUser < ApplicationRecord
   end
 
   def confirm_email
-    update(email_confirmed: true, confirmation_token: nil, confirmation_sent_at: nil)
+    self.email_confirmed = true
+    self.confirmation_token = nil
+    self.confirmation_sent_at = nil
+    save!
   end
 
 end
