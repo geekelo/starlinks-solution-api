@@ -13,6 +13,12 @@ Rails.application.routes.draw do
       resources :password_resets, only: [:create, :update]
       resources :email_confirmations, only: [:create, :update]
       resources :whatsapp_confirmations, only: [:create, :update]
+      resources :starlink_plans
+      resources :starlink_kits do
+        collection do
+          get :check_kit_number
+        end
+      end
     end
   end
 
