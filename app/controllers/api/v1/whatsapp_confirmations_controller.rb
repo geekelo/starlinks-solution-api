@@ -2,7 +2,7 @@ class Api::V1::WhatsappConfirmationsController < ApplicationController
 
   # Send OTP to user's WhatsApp
   def create
-    user = StarlinkUser.find_by(whatsapp_number: params[:whatsapp_number])
+    user = StarlinkUser.find_by(whatsapp_number: params[:whatsapp_number].strip)
 
     if user
       otp = user.generate_whatsapp_confirmation_token
