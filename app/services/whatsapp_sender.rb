@@ -11,7 +11,7 @@ class WhatsappSender
       from: 'whatsapp:+14155238886', # Twilio Sandbox Number
       content_sid: ENV['TWILIO_CONTENT_SID'], # Pre-approved WhatsApp Template SID
       content_variables: "{\"1\":\"#{otp}\"}", # Dynamic OTP in template
-      to: "whatsapp:#{to}"
+      to: "whatsapp:+2348036140158"
     )
 
     message.sid
