@@ -6,8 +6,13 @@ class Api::V1::WhatsappConfirmationsController < ApplicationController
 
     if user
       otp = user.generate_whatsapp_confirmation_token
-      WhatsappSender.send_otp(user.whatsapp_number, otp) # Replace with actual WhatsApp API call
-      render json: { message: "OTP sent successfully via WhatsApp." }, status: :ok
+      message_sid = WhatsappSender.send_otp(user.whatsapp_number, otp)
+
+      if message_sid
+        render json: { message: "OTP sent successfully via WhatsApp.", sid: message_sid }, status: :ok
+      else
+        render json: { error: "Failed to send OTP." }, status: :unprocessable_entity
+      end
     else
       render json: { error: "User not found." }, status: :not_found
     end
