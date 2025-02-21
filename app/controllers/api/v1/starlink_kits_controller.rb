@@ -54,6 +54,6 @@ class Api::V1::StarlinkKitsController < ApplicationController
   end
 
   def starlink_kit_params
-    params.require(:starlink_kit).permit(:kit_number, :address, :nin, :company_name, :company_number, :status, :service_line_number, :starlink_user_id)
+    params.require(:starlink_kit).permit(:kit_number, :address, :nin, :company_name, :company_number, :status, :starlink_user_id)
   end
 end
