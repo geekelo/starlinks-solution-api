@@ -11,7 +11,7 @@ module Api::V1::WhatsappConfirmationsHelper
   end
 
   def whatsapp_confirmation_token_valid?
-    whatsapp_confirmation_sent_at && whatsapp_confirmation_sent_at > 5.minutes.ago
+    whatsapp_confirmation_sent_at && whatsapp_confirmation_sent_at > 25.minutes.ago
   end
 
   def confirm_whatsapp_number(submitted_token)
