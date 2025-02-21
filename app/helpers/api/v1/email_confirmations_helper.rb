@@ -9,7 +9,7 @@ module Api::V1::EmailConfirmationsHelper
   end
 
   def confirmation_token_valid?
-    confirmation_sent_at && confirmation_sent_at > 2.hours.ago
+    confirmation_sent_at && confirmation_sent_at >= 2.hours.ago
   end
 
   def confirm_email
