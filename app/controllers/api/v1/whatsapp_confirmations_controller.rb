@@ -22,7 +22,7 @@ class Api::V1::WhatsappConfirmationsController < ApplicationController
   def update
     user = StarlinkUser.find_by(whatsapp_confirmation_token: params[:token])
 
-    if user && user.confirm_whatsapp_number(params[:otp])
+    if user && user.confirm_whatsapp_number(params[:token])
       render json: { message: "WhatsApp number confirmed successfully." }, status: :ok
     else
       render json: { error: "Invalid or expired OTP." }, status: :unprocessable_entity
