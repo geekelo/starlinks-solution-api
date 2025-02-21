@@ -19,7 +19,7 @@ class Api::V1::WhatsappConfirmationsController < ApplicationController
   end
 
   # Verify OTP and confirm WhatsApp number
-  def update
+  def confirm_user_whatsapp
     user = StarlinkUser.find_by(whatsapp_confirmation_token: params[:code])
     if user && user.confirm_whatsapp_number(params[:code])
       render json: { message: "WhatsApp number confirmed successfully." }, status: :ok

@@ -16,7 +16,12 @@ Rails.application.routes.draw do
           put :confirm_user_email
         end
       end
-      resources :whatsapp_confirmations, only: [:create, :update]
+      resources :whatsapp_confirmations do
+        collection do
+          post :create
+          put :confirm_user_whatsapp
+        end
+      end
       resources :starlink_plans
       resources :starlink_kits do
         collection do
