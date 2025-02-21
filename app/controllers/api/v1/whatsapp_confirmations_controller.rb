@@ -18,17 +18,13 @@ class Api::V1::WhatsappConfirmationsController < ApplicationController
     end
   end
 
-# Verify OTP and confirm WhatsApp number
-def update
-  user = StarlinkUser.find_by(id: params[:id])
-
-  if user.nil?
-    render json: { error: "User not found." }, status: :not_found
-  elsif user.confirm_whatsapp_number(params[:token])
-    render json: { message: "WhatsApp number confirmed successfully." }, status: :ok
-  else
-    render json: { error: "Invalid or expired OTP." }, status: :unprocessable_entity
+  # Verify OTP and confirm WhatsApp number
+  def update
+    user = StarlinkUser.find_by(whatsapp_confirmation_token: params[:code])
+    if user && user.confirm_whatsapp_number(params[:code])
+      render json: { message: "WhatsApp number confirmed successfully." }, status: :ok
+    else
+      render json: { error: "Invalid or expired OTP." }, status: :unprocessable_entity
+    end
   end
-end
-
 end
