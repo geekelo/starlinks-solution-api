@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_22_095146) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_21_090853) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -66,11 +66,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_22_095146) do
     t.datetime "confirmation_sent_at"
     t.string "whatsapp_confirmation_token"
     t.datetime "whatsapp_confirmation_sent_at"
-    t.uuid "starlink_kit_id"
     t.index ["confirmation_token"], name: "index_starlink_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_starlink_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_starlink_users_on_reset_password_token", unique: true
-    t.index ["starlink_kit_id"], name: "index_starlink_users_on_starlink_kit_id"
   end
 
   create_table "starlink_wallet_fundings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -93,7 +91,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_22_095146) do
   add_foreign_key "starlink_kits", "starlink_plans"
   add_foreign_key "starlink_kits", "starlink_users"
   add_foreign_key "starlink_user_wallets", "starlink_users"
-  add_foreign_key "starlink_users", "starlink_kits"
   add_foreign_key "starlink_wallet_fundings", "starlink_user_wallets"
   add_foreign_key "starlink_wallet_fundings", "starlink_users"
 end
