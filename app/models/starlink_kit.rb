@@ -5,6 +5,10 @@ class StarlinkKit < ApplicationRecord
 
   before_validation :set_default_plan, on: :create
 
+  def self.kit_number_exists?(kit_number)
+    exists?(kit_number: kit_number)
+  end
+
   private
 
   def set_default_plan
