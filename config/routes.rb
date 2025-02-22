@@ -11,25 +11,38 @@ Rails.application.routes.draw do
       post "/login", to: "authentication#create"
 
       resources :password_resets, only: [:create, :update]
+      
       resources :email_confirmations do
         collection do
           put :confirm_user_email
         end
       end
+
       resources :whatsapp_confirmations do
         collection do
           post :create
           put :confirm_user_whatsapp
         end
       end
+
       resources :starlink_plans
       resources :starlink_user_wallets
+
+      resources :starlink_users do
+        member do
+          patch :update_email
+          patch :update_phone_number
+          patch :update_whatsapp_number
+        end
+      end
+
       resources :starlink_wallet_fundings do
         collection do
           put :confirm_request
           put :approve_request
         end
       end
+
       resources :starlink_kits do
         collection do
           get :check_kit_number
