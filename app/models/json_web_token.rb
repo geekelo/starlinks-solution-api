@@ -1,5 +1,5 @@
 class JsonWebToken
-  SECRET_KEY = Rails.application.credentials.dig(:JWT_SECRET_KEY) || ENV['JWT_SECRET_KEY']
+  SECRET_KEY = Rails.application.credentials[:JWT_SECRET_KEY] || ENV.fetch('JWT_SECRET_KEY', nil)
 
   def self.encode(payload, exp = 24.hours.from_now)
     payload[:exp] = exp.to_i

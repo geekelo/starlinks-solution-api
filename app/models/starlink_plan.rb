@@ -1,3 +1,2 @@
 class StarlinkPlan < ApplicationRecord
-
 end

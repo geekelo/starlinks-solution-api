@@ -4,7 +4,7 @@ module Api::V1::EmailConfirmationsHelper
   def generate_confirmation_token
     self.confirmation_token = SecureRandom.hex(20)
     self.confirmation_sent_at = Time.current
-    save!  # Save directly when called, but not before create
+    save! # Save directly when called, but not before create
     confirmation_token
   end
 

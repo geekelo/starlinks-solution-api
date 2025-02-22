@@ -1,7 +1,7 @@
 class Api::V1::PasswordResetsController < ApplicationController
   def create
     user = StarlinkUser.find_by(email: params[:email])
-    
+
     if user
       token = user.generate_password_reset_token
       PasswordResetMailer.send_reset_email(user, token).deliver_now
@@ -14,7 +14,7 @@ class Api::V1::PasswordResetsController < ApplicationController
   def update
     user = StarlinkUser.find_by(reset_password_token: params[:token])
 
-    if user && user.password_reset_token_valid?
+    if user&.password_reset_token_valid?
       if user.reset_password(params[:password])
         render json: { message: 'Password has been reset' }, status: :ok
       else

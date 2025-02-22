@@ -1,7 +1,7 @@
 class Api::V1::EmailConfirmationsController < ApplicationController
   def create
     user = StarlinkUser.find_by(email: params[:email])
-    
+
     if user
       token = user.generate_confirmation_token
       ConfirmationEmailMailer.send_confirmation_email(user, token).deliver_now
@@ -14,7 +14,7 @@ class Api::V1::EmailConfirmationsController < ApplicationController
   def confirm_user_email
     user = StarlinkUser.find_by(confirmation_token: params[:token])
 
-    if user && user.confirmation_token_valid?
+    if user&.confirmation_token_valid?
       if user.confirm_email
         render json: { message: 'Email has been confirmed' }, status: :ok
       else

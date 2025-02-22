@@ -6,7 +6,7 @@ class Api::V1::AuthenticationController < ApplicationController
       render json: {
         message: 'Welcome back!',
         user: StarlinkUserSerializer.new(user),
-        token: token
+        token:
       }, status: :ok
     else
       render json: { errors: 'Invalid email or password' }, status: :unauthorized
@@ -20,6 +20,6 @@ class Api::V1::AuthenticationController < ApplicationController
   end
 
   def encode_token(user_id)
-    JsonWebToken.encode({ user_id: user_id }, 'my_secret')
+    JsonWebToken.encode({ user_id: }, 'my_secret')
   end
 end
