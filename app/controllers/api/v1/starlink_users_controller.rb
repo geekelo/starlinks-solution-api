@@ -62,6 +62,6 @@ class Api::V1::StarlinkUsersController < ApplicationController
       render json: { error: "User not found" }, status: :not_found and return
     end
 
-    render json: { email_confirmed: user.email_confirmed, whatsapp_number_confirmed: user.whatsapp_number_confirmed }, status: :ok
+    render json: { email_verified: user.email_confirmed, whatsapp_verified: user.whatsapp_number_confirmed }, status: :ok
   end
 end
