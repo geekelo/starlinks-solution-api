@@ -15,13 +15,14 @@ class Api::V1::StarlinkKitsController < ApplicationController
 
   def create
     starlink_kit = StarlinkKit.new(starlink_kit_params)
-
+  
     if starlink_kit.save
-      render json: starlink_kit, status: :created
+      render json: { message: "Starlink kit created successfully." }, status: :created
     else
-      render json: starlink_kit.errors, status: :unprocessable_entity
+      render json: { errors: starlink_kit.errors.full_messages }, status: :unprocessable_entity
     end
   end
+  
 
   def update
     starlink_kit = StarlinkKit.find(params[:id])
