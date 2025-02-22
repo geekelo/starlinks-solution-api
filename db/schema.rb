@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_21_090853) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_22_113006) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -27,6 +27,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_21_090853) do
     t.uuid "starlink_user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "starlink_kit_id", null: false
+    t.index ["starlink_kit_id"], name: "index_starlink_kits_on_starlink_kit_id", unique: true
     t.index ["starlink_plan_id"], name: "index_starlink_kits_on_starlink_plan_id"
     t.index ["starlink_user_id"], name: "index_starlink_kits_on_starlink_user_id"
   end
