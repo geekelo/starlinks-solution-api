@@ -11,9 +11,36 @@ class Api::V1::StarlinkWalletFundingsController < ApplicationController
     end
   end
 
+  def confirm_request
+    funding = StarlinkWalletFunding.find(params[:id])
+    if funding.update(confirm_funding_params)
+      render json: { message: 'payment confirmation updated successfully.', funding: funding }, status: :ok
+    else
+      render json: { errors: funding.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+
+  def approve_request
+    funding = StarlinkWalletFunding.find(params[:id])
+    if funding.update(update_funding_params)
+      render json: { message: 'Funding status updated successfully.', funding: funding }, status: :ok
+    else
+      render json: { errors: funding.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def funding_params
     params.require(:starlink_wallet_funding).permit(:starlink_user_wallet_id, :amount, :payment_method)
+  end
+
+  def confirm_funding_params
+    params.require(:starlink_wallet_funding).permit(:paid)
+  end
+
+  def update_funding_params
+    params.require(:starlink_wallet_funding).permit(:status)
   end
 end

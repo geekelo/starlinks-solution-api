@@ -24,6 +24,12 @@ Rails.application.routes.draw do
       end
       resources :starlink_plans
       resources :starlink_user_wallets
+      resources :starlink_wallet_fundings do
+        collection do
+          put :confirm_request
+          put :approve_request
+        end
+      end
       resources :starlink_kits do
         collection do
           get :check_kit_number
