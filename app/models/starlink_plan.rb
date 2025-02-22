@@ -1,3 +1,3 @@
 class StarlinkPlan < ApplicationRecord
-   has_many :starlink_kits, optional: true
+   has_many :starlink_kits
 end
