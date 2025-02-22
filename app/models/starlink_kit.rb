@@ -8,6 +8,10 @@ class StarlinkKit < ApplicationRecord
     exists?(kit_number:)
   end
 
+  def assign_starlink_kit_id
+    self.starlink_kit_id ||= SecureRandom.uuid
+  end
+
   private
 
   def set_default_plan
