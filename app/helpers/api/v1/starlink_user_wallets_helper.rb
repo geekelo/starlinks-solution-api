@@ -1,2 +1,2 @@
-module StarlinkUserWalletsHelper
+module Api::V1::StarlinkUserWalletsHelper
 end
