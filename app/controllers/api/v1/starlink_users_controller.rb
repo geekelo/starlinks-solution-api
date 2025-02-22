@@ -55,4 +55,13 @@ class Api::V1::StarlinkUsersController < ApplicationController
       render json: { message: "No change detected for WhatsApp number." }, status: :ok
     end
   end
+
+  def check_confirmation_status
+    user = StarlinkUser.find_by(id: params[:id])
+    unless user
+      render json: { error: "User not found" }, status: :not_found and return
+    end
+
+    render json: { email_confirmed: user.email_confirmed, whatsapp_number_confirmed: user.whatsapp_number_confirmed }, status: :ok
+  end
 end

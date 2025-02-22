@@ -24,9 +24,9 @@ class Api::V1::StarlinkKitsController < ApplicationController
   end
   
 
-  def update
+  def update_address
     starlink_kit = StarlinkKit.find(params[:id])
-    if starlink_kit.update(starlink_kit_params)
+    if starlink_kit.update(starlink_kit_address_params)
       render json: starlink_kit
     else
       render json: starlink_kit.errors, status: :unprocessable_entity
@@ -50,5 +50,9 @@ class Api::V1::StarlinkKitsController < ApplicationController
 
   def starlink_kit_params
     params.require(:starlink_kit).permit(:kit_number, :address, :nin, :company_name, :company_number, :starlink_user_id)
+  end
+
+  def starlink_kit_address_params
+    params.require(:starlink_kit_address).permit(:address)
   end
 end

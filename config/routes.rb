@@ -33,6 +33,7 @@ Rails.application.routes.draw do
           patch :update_email
           patch :update_phone_number
           patch :update_whatsapp_number
+          get :check_confirmation_status
         end
       end
 
@@ -46,6 +47,7 @@ Rails.application.routes.draw do
       resources :starlink_kits do
         collection do
           get :check_kit_number
+          put :update_address
         end
       end
     end
