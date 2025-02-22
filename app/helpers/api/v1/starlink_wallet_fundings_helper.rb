@@ -1,0 +1,2 @@
+module StarlinkWalletFundingsHelper
+end
