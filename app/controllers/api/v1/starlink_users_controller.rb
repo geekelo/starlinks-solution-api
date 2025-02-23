@@ -1,5 +1,12 @@
 class Api::V1::StarlinkUsersController < ApplicationController
   # PATCH /api/v1/starlink_users/:id/update_email
+
+  def index
+  end
+
+  def show
+  end
+
   def update_email
     user = StarlinkUser.find_by(id: params[:id])
     unless user
@@ -56,7 +63,7 @@ class Api::V1::StarlinkUsersController < ApplicationController
     end
   end
 
-  def show
+  def check_confirmation_status
     user = StarlinkUser.find_by(id: params[:id])
     unless user
       render json: { error: "User not found" }, status: :not_found and return
