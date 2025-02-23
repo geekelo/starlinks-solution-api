@@ -56,7 +56,7 @@ class Api::V1::StarlinkUsersController < ApplicationController
     end
   end
 
-  def check_confirmation_status
+  def show
     user = StarlinkUser.find_by(id: params[:id])
     unless user
       render json: { error: "User not found" }, status: :not_found and return
