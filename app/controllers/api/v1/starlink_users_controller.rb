@@ -11,12 +11,14 @@ class Api::V1::StarlinkUsersController < ApplicationController
   end
 
   def email_change_request
-    user = StarlinkUser.find_by(id: user_params[:starlink_user_profile][:id])
+    user = StarlinkUser.find_by(id: user_params[:id])
+  
     unless user
       render json: { error: "User not found" }, status: :not_found and return
     end
-
-    new_email = user_params[:starlink_user_profile][:profile_param]
+  
+    new_email = user_params[:profile_param]
+  
     if new_email.present? && new_email != user.email
       if user.update(email: new_email, email_confirmed: false)
         render json: { message: "Email updated successfully. Please verify your new email.", user: user }, status: :ok
@@ -26,7 +28,7 @@ class Api::V1::StarlinkUsersController < ApplicationController
     else
       render json: { message: "No change detected for email." }, status: :ok
     end
-  end
+  end  
 
   # PATCH /api/v1/starlink_users/:id/update_phone_number
   def update_phone_number
