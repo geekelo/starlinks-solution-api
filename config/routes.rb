@@ -29,7 +29,7 @@ Rails.application.routes.draw do
       resources :starlink_user_wallets
 
       resources :starlink_users do
-        collection do
+        member do
           patch :update_email
           patch :update_phone_number
           patch :update_whatsapp_number
@@ -45,7 +45,7 @@ Rails.application.routes.draw do
       end
 
       resources :starlink_kits do
-        collection do
+        member do
           get :check_kit_number
           put :update_address
         end
