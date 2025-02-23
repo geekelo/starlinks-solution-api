@@ -7,6 +7,9 @@ class Api::V1::StarlinkUsersController < ApplicationController
   def show
   end
 
+  def update
+  end
+
   def update_email
     user = StarlinkUser.find_by(id: params[:id])
     unless user
