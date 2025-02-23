@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       post "/signup", to: "registration#create"
       post "/login", to: "authentication#create"
+      get "starlink_kits/check_kit_number", to: "starlink_kits#check_kit_number"
 
       resources :password_resets, only: [:create, :update]
       
@@ -45,7 +46,6 @@ Rails.application.routes.draw do
       end
 
       resources :starlink_kits do
-        get 'starlink_kits/check_kit_number', to: 'starlink_kits#check_kit_number'
         collection do
           put :kit_address_change_request
         end
