@@ -31,8 +31,8 @@ Rails.application.routes.draw do
       resources :starlink_users do
         collection do
           put :email_change_request
-          put :update_phone_number
-          put :update_whatsapp_number
+          put :phone_number_change_request
+          put :whatsapp_number_change_request
           get :check_confirmation_status
         end
       end
@@ -47,7 +47,7 @@ Rails.application.routes.draw do
       resources :starlink_kits do
         member do
           get :check_kit_number
-          put :update_address
+          put :kit_address_change_request
         end
       end
     end

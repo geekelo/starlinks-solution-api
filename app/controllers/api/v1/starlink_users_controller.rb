@@ -33,11 +33,13 @@ class Api::V1::StarlinkUsersController < ApplicationController
   # PATCH /api/v1/starlink_users/:id/update_phone_number
   def update_phone_number
     user = StarlinkUser.find_by(id: user_params[:id])
+  
     unless user
       render json: { error: "User not found" }, status: :not_found and return
     end
-
-    new_phone_number =  user_params[:profile_param]
+  
+    new_phone_number = user_params[:profile_param]
+  
     if new_phone_number.present? && new_phone_number != user.phone_number
       if user.update(phone_number: new_phone_number)
         render json: { message: "Phone number updated successfully.", user: user }, status: :ok
@@ -47,16 +49,18 @@ class Api::V1::StarlinkUsersController < ApplicationController
     else
       render json: { message: "No change detected for phone number." }, status: :ok
     end
-  end
+  end  
 
   # PATCH /api/v1/starlink_users/:id/update_whatsapp_number
-  def update_whatsapp_number
+  def whatsapp_number_change_request
     user = StarlinkUser.find_by(id: user_params[:id])
+  
     unless user
       render json: { error: "User not found" }, status: :not_found and return
     end
-
+  
     new_whatsapp_number = user_params[:profile_param]
+  
     if new_whatsapp_number.present? && new_whatsapp_number != user.whatsapp_number
       if user.update(whatsapp_number: new_whatsapp_number, whatsapp_number_confirmed: false)
         render json: { message: "WhatsApp number updated successfully. Please verify your new WhatsApp number.", user: user }, status: :ok
@@ -67,7 +71,7 @@ class Api::V1::StarlinkUsersController < ApplicationController
       render json: { message: "No change detected for WhatsApp number." }, status: :ok
     end
   end
-
+  
   def check_confirmation_status
     user = StarlinkUser.find_by(id: params[:id])
     unless user
