@@ -2,7 +2,6 @@
 class StarlinkKit < ApplicationRecord
   belongs_to :starlink_user, optional: true, dependent: :destroy
   belongs_to :starlink_plan, optional: true  
-  has_many :starlink_kit_renewals
 
   before_validation :set_default_plan, on: :create
 

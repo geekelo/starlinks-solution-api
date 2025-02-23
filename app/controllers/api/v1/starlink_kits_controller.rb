@@ -10,7 +10,13 @@ class Api::V1::StarlinkKitsController < ApplicationController
   end
 
   def show
-    render json: starlink_kit
+    kit = StarlinkKit.find_by(kit_number: params[:kit_number])
+
+    if kit
+      render json: { exists: true, message: 'Kit number found.', kit: kit }, status: :ok
+    else
+      render json: { exists: false, message: 'Kit number not found.' }, status: :not_found
+    end
   end
 
   def create
@@ -22,7 +28,12 @@ class Api::V1::StarlinkKitsController < ApplicationController
       render json: { errors: starlink_kit.errors.full_messages }, status: :unprocessable_entity
     end
   end
-  
+
+  def destroy
+    starlink_kit = StarlinkKit.find(params[:id])
+    starlink_kit.destroy
+  end
+
   def kit_address_change_request
     starlink_kit = StarlinkKit.find(params[:id])
     if starlink_kit.update(starlink_kit_address_params)
@@ -32,19 +43,16 @@ class Api::V1::StarlinkKitsController < ApplicationController
     end
   end
 
-  def destroy
-    starlink_kit = StarlinkKit.find(params[:id])
-    starlink_kit.destroy
-  end
-
   def check_kit_number
-    if StarlinkKit.kit_number_exists?(params[:kit_number])
+    kit_number = params[:kit_number]
+  
+    if kit_number.present? && StarlinkKit.exists?(kit_number: kit_number)
       render json: { exists: true, message: 'Kit number already exists.' }, status: :ok
     else
       render json: { exists: false, message: 'Kit number is available.' }, status: :ok
     end
   end
-
+  
   private
 
   def starlink_kit_params

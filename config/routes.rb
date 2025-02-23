@@ -45,8 +45,8 @@ Rails.application.routes.draw do
       end
 
       resources :starlink_kits do
-        member do
-          get :check_kit_number
+        get 'starlink_kits/check_kit_number', to: 'starlink_kits#check_kit_number'
+        collection do
           put :kit_address_change_request
         end
       end
