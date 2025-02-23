@@ -29,10 +29,12 @@ Rails.application.routes.draw do
       resources :starlink_user_wallets
 
       resources :starlink_users do
-          put :update_email
+        collection do
+          put :email_change_request
           put :update_phone_number
           put :update_whatsapp_number
           get :check_confirmation_status
+        end
       end
 
       resources :starlink_wallet_fundings do

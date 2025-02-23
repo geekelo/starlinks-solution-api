@@ -10,7 +10,7 @@ class Api::V1::StarlinkUsersController < ApplicationController
   def update
   end
 
-  def update_email
+  def email_change_request
     user = StarlinkUser.find_by(id: user_params[:starlink_user_profile][:id])
     unless user
       render json: { error: "User not found" }, status: :not_found and return
