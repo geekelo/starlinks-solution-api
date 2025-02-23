@@ -33,7 +33,7 @@ class Api::V1::StarlinkWalletFundingsController < ApplicationController
   private
 
   def funding_params
-    params.require(:starlink_wallet_funding).permit(:starlink_user_wallet_id, :amount, :payment_method)
+    params.require(:starlink_wallet_funding).permit(:starlink_user_wallet_id, :amount, :payment_method, :starlink_user_id)
   end
 
   def confirm_funding_params
