@@ -1,5 +1,4 @@
 class StarlinkWalletFunding < ApplicationRecord
-  belongs_to :starlink_user
   belongs_to :starlink_user_wallet
 
   before_validation :generate_reference, on: :create

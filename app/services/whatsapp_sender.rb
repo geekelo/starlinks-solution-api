@@ -9,7 +9,8 @@ class WhatsappSender
     message = @client.messages.create(
       from: 'whatsapp:+14155238886', # Twilio Sandbox Number
       to: "whatsapp:#{to}",
-      body: "From Starlink Installation Solutions: Please send STOP here, then Use the OTP code #{otp} to complete your WhatsApp verification on our website." # Sending OTP directly as message
+      body: "**Starlink Installation Solutions**: Enter this code **#{otp}** on our website to proceed.
+        Send **STOP** here on WhatsApp to complete the verification process."
     )
 
     message.sid
