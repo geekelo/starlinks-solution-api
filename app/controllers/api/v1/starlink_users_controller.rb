@@ -31,7 +31,7 @@ class Api::V1::StarlinkUsersController < ApplicationController
   end  
 
   # PATCH /api/v1/starlink_users/:id/update_phone_number
-  def update_phone_number
+  def phone_number_change_request
     user = StarlinkUser.find_by(id: user_params[:id])
   
     unless user

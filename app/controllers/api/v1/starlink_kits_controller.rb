@@ -23,7 +23,6 @@ class Api::V1::StarlinkKitsController < ApplicationController
     end
   end
   
-
   def kit_address_change_request
     starlink_kit = StarlinkKit.find(params[:id])
     if starlink_kit.update(starlink_kit_address_params)
