@@ -1,8 +1,8 @@
 class Api::V1::StarlinkWalletFundingsController < ApplicationController
   # POST /api/v1/starlink_wallet_fundings
   def create
-    StarlinkUser.find(params[:starlink_user_id])
-    funding = @starlink_user.starlink_wallet_fundings.new(funding_params)
+    starlink_user = StarlinkUser.find(params[:starlink_user_id])
+    funding = starlink_user.starlink_wallet_fundings.new(funding_params)
 
     if funding.save
       render json: { message: 'Wallet funded successfully.', funding: }, status: :created
