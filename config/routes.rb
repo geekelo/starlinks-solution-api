@@ -30,9 +30,9 @@ Rails.application.routes.draw do
 
       resources :starlink_users do
         member do
-          patch :update_email
-          patch :update_phone_number
-          patch :update_whatsapp_number
+          put :update_email
+          put :update_phone_number
+          put :update_whatsapp_number
           get :check_confirmation_status
         end
       end
