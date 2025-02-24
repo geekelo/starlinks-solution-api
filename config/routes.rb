@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       post "/login", to: "authentication#create"
       get "starlink_kits/check_kit_number", to: "starlink_kits#check_kit_number"
       get "starlink_kits/:id", to: "starlink_kits#show"
+      et "starlink_kit/:id", to: "starlink_kits#show"
 
       resources :password_resets, only: [:create, :update]
       

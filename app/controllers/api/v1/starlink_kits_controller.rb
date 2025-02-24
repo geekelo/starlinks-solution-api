@@ -10,14 +10,18 @@ class Api::V1::StarlinkKitsController < ApplicationController
   end
 
   def show
-    kit = StarlinkKit.find_by(id: params[:id])
-
-    if kit
-      render json: { exists: true, message: 'Kit number found.', kit: kit }, status: :ok
+    if params[:id].present?
+      kit = StarlinkKit.find_by(id: params[:id])
+  
+      if kit
+        render json: { exists: true, message: 'Kit found.', kit: kit }, status: :ok
+      else
+        render json: { exists: false, message: 'Kit not found.' }, status: :not_found
+      end
     else
-      render json: { exists: false, message: 'Kit number not found.' }, status: :not_found
+      render json: { error: 'No kit ID provided.' }, status: :bad_request
     end
-  end
+  end  
 
   def create
     starlink_kit = StarlinkKit.new(starlink_kit_params)
