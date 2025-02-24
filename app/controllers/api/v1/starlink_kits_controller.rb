@@ -1,8 +1,7 @@
 class Api::V1::StarlinkKitsController < ApplicationController
-  before_action :authenticate_user!
-
   def index
-    if current_user
+    user = StarlinkUser.find_by(id: all_kits_params[:starlink_user_id])
+    if user
       starlink_kits = StarlinkKit.where(starlink_user_id: current_user.id)
       render json: starlink_kits, status: :ok
     else
@@ -59,6 +58,10 @@ class Api::V1::StarlinkKitsController < ApplicationController
   end
   
   private
+
+  def all_kits_params
+    params.require(:starlink_kit).permit(:starlink_user_id)
+  end
 
   def starlink_kit_params
     params.require(:starlink_kit).permit(:kit_number, :address, :nin, :company_name, :company_number, :starlink_user_id)
