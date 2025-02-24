@@ -10,7 +10,7 @@ class Api::V1::StarlinkKitsController < ApplicationController
   end
 
   def show
-    kit = StarlinkKit.find_by(kit_number: params[:kit_number])
+    kit = StarlinkKit.find_by(id: params[:id])
 
     if kit
       render json: { exists: true, message: 'Kit number found.', kit: kit }, status: :ok
