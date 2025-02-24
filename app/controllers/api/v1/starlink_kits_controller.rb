@@ -1,21 +1,19 @@
 class Api::V1::StarlinkKitsController < ApplicationController
-  
+  before_action :authenticate_token!
+
   def index
-    user_id = all_kits_params[:starlink_user_id]
-  
-    if user_id.present?
-      user = StarlinkUser.find_by(id: user_id)
-  
-      if user
-        starlink_kits = StarlinkKit.where(starlink_user_id: user.id)
+    user = current_user
+    if user
+      starlink_kits = StarlinkKit.where(starlink_user_id: user.id)
+      if starlink_kits.present?
         render json: starlink_kits, status: :ok
       else
-        render json: { error: 'User not authenticated.' }, status: :unauthorized
+        render json: { message: 'No kits found.' }, status: :ok
       end
     else
-      render json: { error: 'starlink_user_id parameter is missing.' }, status: :bad_request
+      render json: { error: 'User not authenticated.' }, status: :unauthorized
     end
-  end
+  end  
 
   def show
     if params[:id].present?
