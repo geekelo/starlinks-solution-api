@@ -9,7 +9,7 @@ class Api::V1::StarlinkKitsController < ApplicationController
     render json: starlink_kits
   end
 
-  def show
+  def kit_details
     if params[:id].present?
       kit = StarlinkKit.find_by(id: params[:id])
   
