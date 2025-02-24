@@ -1,5 +1,4 @@
 class Api::V1::StarlinkKitsController < ApplicationController
-  before_action :authenticate_user!
   
   def index
     user = StarlinkUser.find_by(id: all_kits_params[:starlink_user_id])
