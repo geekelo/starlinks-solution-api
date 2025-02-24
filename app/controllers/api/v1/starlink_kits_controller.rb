@@ -14,7 +14,7 @@ class Api::V1::StarlinkKitsController < ApplicationController
 
   def show
     if params[:id].present?
-      kit = StarlinkKit.find_by(id: params[:id], current_user)
+      kit = StarlinkKit.find_by(id: params[:id])
   
       if kit
         render json: { exists: true, message: 'Kit found.', kit: kit }, status: :ok
