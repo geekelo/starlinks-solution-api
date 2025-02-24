@@ -2,7 +2,7 @@ class Api::V1::StarlinkKitsController < ApplicationController
   def index
     user = StarlinkUser.find_by(id: all_kits_params[:starlink_user_id])
     if user
-      starlink_kits = StarlinkKit.where(starlink_user_id: current_user.id)
+      starlink_kits = StarlinkKit.where(starlink_user_id: user.id)
       render json: starlink_kits, status: :ok
     else
       render json: { error: 'User not authenticated.' }, status: :unauthorized
