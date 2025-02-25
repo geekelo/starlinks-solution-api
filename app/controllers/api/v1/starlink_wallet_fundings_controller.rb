@@ -1,7 +1,23 @@
 class Api::V1::StarlinkWalletFundingsController < ApplicationController
+  before_action :authenticate_token!
+
+  def index
+    user = current_user
+    if user
+      fundings = StarlinkWalletFunding.where(starlink_user_id: user.id)
+      if fundings.present?
+        render json: fundings, status: :ok
+      else
+        render json: { message: 'No fundings found.' }, status: :ok
+      end
+    else
+      render json: { error: 'User not authenticated.' }, status: :unauthorized
+    end
+  end
+
   # POST /api/v1/starlink_wallet_fundings
   def create
-    starlink_user = StarlinkUser.find(params[:starlink_user_id])
+    starlink_user = current_user
     funding = starlink_user.starlink_wallet_fundings.new(funding_params)
 
     if funding.save
