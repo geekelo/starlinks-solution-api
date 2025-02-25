@@ -5,7 +5,7 @@ class ApplicationController < ActionController::API
 
   def authenticate_token!
     payload = JsonWebToken.decode(auth_token)
-    @current_user = User.find(payload['sub'])
+    @current_user = StarlinkUser.find(payload['sub'])
   rescue JWT::DecodeError
     render json: { error: 'Invalid auth token' }, status: :unauthorized
   end
