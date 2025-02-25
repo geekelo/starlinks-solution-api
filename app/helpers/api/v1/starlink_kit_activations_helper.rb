@@ -47,7 +47,7 @@ module Api::V1::StarlinkKitActivationsHelper
       wallet.starlink_kit_renewals.create!(
         starlink_kit_id: kit_id,
         amount: price_plan,
-        due_date: Date.today.change(day: 26)
+        due_date: Date.today.change(day: 26),
         status: "invoice",
         paid: false,
         month: next_month.month,
