@@ -1,11 +1,15 @@
 module Api::V1::EmailConfirmationsHelper
 
   def generate_confirmation_token
-    self.confirmation_token = SecureRandom.hex(20)
-    self.confirmation_sent_at = Time.current
-    save! # Save directly when called, but not before create
+    return unless persisted? # Ensure the user is saved before updating
+    
+    update!(
+      confirmation_token: SecureRandom.hex(20),
+      confirmation_sent_at: Time.current
+    )
     confirmation_token
   end
+  
 
   def confirmation_token_valid?
     confirmation_sent_at && confirmation_sent_at >= 2.hours.ago
