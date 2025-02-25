@@ -5,4 +5,7 @@ class StarlinkKitRenewal < ApplicationRecord
   belongs_to :starlink_user
 
   include Api::V1::RenewalPdfGeneratorHelper
+  include Api::V1::StarlinkKitRenewalsHelper
+  include Api::V1::StarlinkKitActivationsHelper
+
 end

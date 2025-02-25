@@ -10,10 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_22_143606) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_25_021549) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "starlink_kit_renewals", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "deadline", null: false
+    t.uuid "starlink_kit_id", null: false
+    t.uuid "starlink_user_wallet_id", null: false
+    t.uuid "starlink_user_id", null: false
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.string "status", default: "invoice"
+    t.boolean "credit_admin", default: false
+    t.integer "month", null: false
+    t.integer "year", null: false
+    t.date "date_of_renewal"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["starlink_kit_id"], name: "index_starlink_kit_renewals_on_starlink_kit_id"
+    t.index ["starlink_user_id"], name: "index_starlink_kit_renewals_on_starlink_user_id"
+    t.index ["starlink_user_wallet_id"], name: "index_starlink_kit_renewals_on_starlink_user_wallet_id"
+  end
 
   create_table "starlink_kits", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "kit_number", null: false
@@ -68,6 +86,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_22_143606) do
     t.datetime "confirmation_sent_at"
     t.string "whatsapp_confirmation_token"
     t.datetime "whatsapp_confirmation_sent_at"
+    t.boolean "otsp", default: false
     t.index ["confirmation_token"], name: "index_starlink_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_starlink_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_starlink_users_on_reset_password_token", unique: true
@@ -90,6 +109,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_22_143606) do
     t.index ["transaction_id"], name: "index_starlink_wallet_fundings_on_transaction_id", unique: true
   end
 
+  add_foreign_key "starlink_kit_renewals", "starlink_kits"
+  add_foreign_key "starlink_kit_renewals", "starlink_user_wallets"
+  add_foreign_key "starlink_kit_renewals", "starlink_users"
   add_foreign_key "starlink_kits", "starlink_plans"
   add_foreign_key "starlink_kits", "starlink_users"
   add_foreign_key "starlink_user_wallets", "starlink_users"

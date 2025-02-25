@@ -10,6 +10,10 @@ Rails.application.routes.draw do
       post "/signup", to: "registration#create"
       post "/login", to: "authentication#create"
 
+      get "starlink_renewals/:id", to: "starlink_renewals#user_kit_renewals"
+      post 'starlink_activates/:kit_id/activate_kit', to: 'starlink_activates#activate_kit'
+      # POST /api/v1/starlink_activates/1234-5678-9101/activate_kit
+
       resources :password_resets, only: [:create, :update]
       
       resources :email_confirmations do
@@ -28,7 +32,7 @@ Rails.application.routes.draw do
       resources :starlink_plans
       resources :starlink_user_wallets
       resource :starlink_user_wallet, only: [:show]
-      
+
       resources :starlink_users do
         collection do
           put :email_change_request
