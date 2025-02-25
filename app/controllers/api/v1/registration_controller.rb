@@ -31,6 +31,6 @@ class Api::V1::RegistrationController < ApplicationController
   end
 
   def create_wallet_for(user)
-    StarlinkUserWallet.create!(starlink_user: user, balance: 0)
+    StarlinkUserWallet.create!(starlink_user_id: user.id)
   end
 end
