@@ -6,6 +6,8 @@ class Api::V1::StarlinkKitsController < ApplicationController
     if user
       starlink_kits = StarlinkKit.where(starlink_user_id: user.id)
       if starlink_kits.present?
+         # Check and deactivate overdue kits
+        starlink_kits.each { |kit| check_and_deactivate_kit(kit) }
         render json: starlink_kits, status: :ok
       else
         render json: { message: 'No kits found.' }, status: :ok
@@ -64,6 +66,17 @@ class Api::V1::StarlinkKitsController < ApplicationController
   end
   
   private
+
+  def check_and_deactivate_kit(kit)
+    renewal = kit.starlink_kit_renewals
+                 .where(status: "invoice", paid: false)
+                 .order(due_date: :desc)
+                 .first
+  
+    if renewal && renewal.due_date < Date.today
+      kit.update!(status: 'deactivated')
+    end
+  end
 
   def all_kits_params
     params.require(:kit_user).permit(:starlink_user_id)

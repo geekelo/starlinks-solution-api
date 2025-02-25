@@ -1,6 +1,8 @@
 class Api::V1::EmailConfirmationsController < ApplicationController
+  before_action :authenticate_token!
+  
   def create
-    user = StarlinkUser.find_by(email: params[:email])
+    user = current_user
 
     if user
       token = user.generate_confirmation_token
@@ -12,7 +14,11 @@ class Api::V1::EmailConfirmationsController < ApplicationController
   end
 
   def confirm_user_email
-    user = StarlinkUser.find_by(confirmation_token: params[:token])
+    unless current_user.confirmation_token == params[:token]
+      return render json: { error: "Invalid confirmation token" }, status: :unauthorized
+    end
+  
+    user = current_user
 
     if user&.confirmation_token_valid?
       if user.confirm_email

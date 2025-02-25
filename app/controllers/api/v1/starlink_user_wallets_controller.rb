@@ -1,5 +1,5 @@
 class Api::V1::StarlinkUserWalletsController < ApplicationController
-  before_action :authenticate_token!
+  before_action :authenticate_token!, except: [:create]
   before_action :set_wallet, only: %i[show update destroy]
 
   # Create a wallet

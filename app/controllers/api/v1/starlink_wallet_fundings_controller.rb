@@ -5,7 +5,13 @@ class Api::V1::StarlinkWalletFundingsController < ApplicationController
     user = current_user
     if user
       fundings = StarlinkWalletFunding.where(starlink_user_id: user.id)
+  
       if fundings.present?
+        # Expire fundings where 'paid' is false and older than 2 hours
+        fundings.where(paid: "no", status: "pending")
+                .where("created_at <= ?", 2.hours.ago)
+                .update_all(status: "expired")
+  
         render json: fundings, status: :ok
       else
         render json: { message: 'No fundings found.' }, status: :ok
@@ -14,6 +20,7 @@ class Api::V1::StarlinkWalletFundingsController < ApplicationController
       render json: { error: 'User not authenticated.' }, status: :unauthorized
     end
   end
+  
 
   # POST /api/v1/starlink_wallet_fundings
   def create
