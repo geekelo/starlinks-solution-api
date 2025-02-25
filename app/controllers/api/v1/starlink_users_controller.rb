@@ -1,5 +1,5 @@
 class Api::V1::StarlinkUsersController < ApplicationController
-  # PATCH /api/v1/starlink_users/:id/update_email
+  before_action :authenticate_token!
 
   def index
   end
@@ -11,7 +11,7 @@ class Api::V1::StarlinkUsersController < ApplicationController
   end
 
   def email_change_request
-    user = StarlinkUser.find_by(id: user_params[:id])
+    user = current_user
   
     unless user
       render json: { error: "User not found" }, status: :not_found and return
@@ -32,7 +32,7 @@ class Api::V1::StarlinkUsersController < ApplicationController
 
   # PATCH /api/v1/starlink_users/:id/update_phone_number
   def phone_number_change_request
-    user = StarlinkUser.find_by(id: user_params[:id])
+    user = current_user
   
     unless user
       render json: { error: "User not found" }, status: :not_found and return
@@ -53,7 +53,7 @@ class Api::V1::StarlinkUsersController < ApplicationController
 
   # PATCH /api/v1/starlink_users/:id/update_whatsapp_number
   def whatsapp_number_change_request
-    user = StarlinkUser.find_by(id: user_params[:id])
+    user = current_user
   
     unless user
       render json: { error: "User not found" }, status: :not_found and return
@@ -73,7 +73,7 @@ class Api::V1::StarlinkUsersController < ApplicationController
   end
   
   def check_confirmation_status
-    user = StarlinkUser.find_by(id: params[:id])
+    user = current_user
     unless user
       render json: { error: "User not found" }, status: :not_found and return
     end
@@ -84,6 +84,6 @@ class Api::V1::StarlinkUsersController < ApplicationController
   private
 
   def user_params
-    params.require(:starlink_user_profile).permit(:id, :profile_param)
+    params.require(:starlink_user_profile).permit(:profile_param)
   end
 end
