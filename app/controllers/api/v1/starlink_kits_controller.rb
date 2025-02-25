@@ -69,7 +69,7 @@ class Api::V1::StarlinkKitsController < ApplicationController
 
   def check_and_deactivate_kit(kit)
     renewal = kit.starlink_kit_renewals
-                 .where(status: "invoice", paid: false)
+                 .where(status: "invoice")
                  .order(due_date: :desc)
                  .first
   
