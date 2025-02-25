@@ -50,7 +50,7 @@ class Api::V1::StarlinkUserWalletsController < ApplicationController
   private
 
   def set_wallet
-    @wallet = StarlinkUserWallet.find_by(id: current_user&.starlink_user_wallet_id)
+    @wallet = current_user&.starlink_user_wallet
   end
 
   def wallet_params

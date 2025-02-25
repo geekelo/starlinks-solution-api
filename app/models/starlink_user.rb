@@ -4,6 +4,6 @@ class StarlinkUser < ApplicationRecord
   include Api::V1::EmailConfirmationsHelper
 
   has_secure_password
-  has_one :starlink_wallet
+  has_one :starlink_user_wallet
   has_many :starlink_wallet_fundings
 end
