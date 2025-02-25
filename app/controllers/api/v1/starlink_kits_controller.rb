@@ -70,10 +70,10 @@ class Api::V1::StarlinkKitsController < ApplicationController
   def check_and_deactivate_kit(kit)
     renewal = kit.starlink_kit_renewals
                  .where(status: "invoice")
-                 .order(due_date: :desc)
+                 .order(deadline: :desc)
                  .first
   
-    if renewal && renewal.due_date < Date.today
+    if renewal && renewal.deadline < Date.today
       kit.update!(status: 'deactivated')
     end
   end

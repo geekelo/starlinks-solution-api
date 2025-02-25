@@ -5,18 +5,18 @@ module Api::V1::StarlinkKitActivationsHelper
   def self.create_new_renewal(wallet, kit_plan_id, kit_id)
     last_renewal = wallet.starlink_kit_renewals
                          .where(status: "invoice", starlink_kit_id: kit_id)
-                         .order(due_date: :desc)
+                         .order(deadline: :desc)
                          .first
     
     plan_price = StarlinkPlan.find_by(id: kit_plan_id)&.price || 0
 
-    if last_renewal.nil? || last_renewal.due_date < Date.today
+    if last_renewal.nil? || last_renewal.deadline < Date.today
   
       # Receipt for the current month
       wallet.starlink_kit_renewals.create!(
         starlink_kit_id: kit_id,
         amount: plan_price,
-        due_date: Date.today,
+        deadline: Date.today,
         month: Date.today.month,
         status: "receipt",
         paid: true,
@@ -31,7 +31,7 @@ module Api::V1::StarlinkKitActivationsHelper
       wallet.starlink_kit_renewals.create!(
         starlink_kit_id: kit_id,
         amount: invoice_amount,
-        due_date: Date.today + 26.days,
+        deadline: Date.today + 26.days,
         status: "invoice",
         paid: false,
         month: next_month.month,
@@ -47,7 +47,7 @@ module Api::V1::StarlinkKitActivationsHelper
       wallet.starlink_kit_renewals.create!(
         starlink_kit_id: kit_id,
         amount: price_plan,
-        due_date: Date.today.change(day: 26),
+        deadline: Date.today.change(day: 26),
         status: "invoice",
         paid: false,
         month: next_month.month,
@@ -64,12 +64,12 @@ module Api::V1::StarlinkKitActivationsHelper
   
     last_renewal = wallet.starlink_kit_renewals
                          .where(status: "invoice", starlink_kit_id: kit_id)
-                         .order(due_date: :desc)
+                         .order(deadline: :desc)
                          .first
   
     plan_price = StarlinkPlan.find_by(id: kit_plan_id)&.price || 0
   
-    if last_renewal.nil? || last_renewal.due_date < Date.today
+    if last_renewal.nil? || last_renewal.deadline < Date.today
       unpaid_renewals_sum + plan_price
     else
       unpaid_renewals_sum
