@@ -1,16 +1,16 @@
 module Api::V1::EmailConfirmationsHelper
 
   def generate_confirmation_token
-    return unless persisted? # Ensure the user is saved before updating
-    
-    update!(
-      confirmation_token: SecureRandom.hex(20),
-      confirmation_sent_at: Time.current
-    )
-    confirmation_token
-  end
+    confirmation_token = SecureRandom.hex(20)
+    confirmation_sent_at = Time.current
   
-
+    if save
+      confirmation_token
+    else
+      Rails.logger.error "Failed to save confirmation token: #{errors.full_messages}"
+    end
+  end  
+  
   def confirmation_token_valid?
     confirmation_sent_at && confirmation_sent_at >= 2.hours.ago
   end
