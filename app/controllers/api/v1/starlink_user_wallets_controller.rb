@@ -1,4 +1,5 @@
 class Api::V1::StarlinkUserWalletsController < ApplicationController
+  before_action :authenticate_token!
   before_action :set_wallet, only: %i[show update destroy]
 
   # Create a wallet
@@ -49,7 +50,7 @@ class Api::V1::StarlinkUserWalletsController < ApplicationController
   private
 
   def set_wallet
-    @wallet = StarlinkUserWallet.find_by(id: params[:id])
+    @wallet = StarlinkUserWallet.find_by(id: current_user&.starlink_user_wallet_id)
   end
 
   def wallet_params

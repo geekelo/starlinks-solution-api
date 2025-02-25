@@ -27,7 +27,8 @@ Rails.application.routes.draw do
 
       resources :starlink_plans
       resources :starlink_user_wallets
-
+      resource :starlink_user_wallet, only: [:show]
+      
       resources :starlink_users do
         collection do
           put :email_change_request
