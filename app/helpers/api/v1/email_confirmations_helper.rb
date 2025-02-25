@@ -1,5 +1,4 @@
 module Api::V1::EmailConfirmationsHelper
-  extend ActiveSupport::Concern
 
   def generate_confirmation_token
     self.confirmation_token = SecureRandom.hex(20)

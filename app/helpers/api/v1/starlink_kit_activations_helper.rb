@@ -1,5 +1,4 @@
 module Api::V1::StarlinkKitActivationsHelper
-  extend ActiveSupport::Concern
 
   # Create a new renewal if needed (due date passed or no previous renewal)
   def self.create_new_renewal(wallet, kit_plan_id, kit_id)

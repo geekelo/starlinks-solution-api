@@ -1,5 +1,4 @@
 module Api::V1::PasswordResetsHelper
-  extend ActiveSupport::Concern
 
   def generate_password_reset_token
     token = SecureRandom.hex(10)

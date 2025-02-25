@@ -1,5 +1,4 @@
 module Api::V1::WhatsappConfirmationsHelper
-  extend ActiveSupport::Concern
 
   def generate_whatsapp_confirmation_token
     token = rand(100_000..999_999).to_s # Generate 6-digit OTP
