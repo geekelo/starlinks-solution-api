@@ -7,6 +7,7 @@ class Api::V1::RegistrationController < ApplicationController
     else
       user = StarlinkUser.new(signup_params)
       if user.save
+        create_wallet_for(user)
         render json: user, status: :ok
       else
         render json: { errors: 'Something went wrong with creating user' }, status: :unprocessable_entity
@@ -27,5 +28,9 @@ class Api::V1::RegistrationController < ApplicationController
 
   def whatsapp_number_exists(whatsapp_number)
     StarlinkUser.exists?(whatsapp_number:)
+  end
+
+  def create_wallet_for(user)
+    StarlinkUserWallet.create!(starlink_user: user, balance: 0)
   end
 end
