@@ -6,4 +6,5 @@ class StarlinkUser < ApplicationRecord
   has_secure_password
   has_one :starlink_user_wallet
   has_many :starlink_wallet_fundings
+  has_many :starlink_kits
 end
