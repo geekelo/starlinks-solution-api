@@ -32,7 +32,7 @@ class Api::V1::StarlinkKitsController < ApplicationController
   end  
 
   def create
-    starlink_kit = StarlinkKit.new(starlink_kit_params)
+    starlink_kit = current_user.starlink_kits.new(starlink_kit_params)
   
     if starlink_kit.save
       render json: { message: "Starlink kit created successfully." }, status: :created
