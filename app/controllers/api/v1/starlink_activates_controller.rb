@@ -4,7 +4,7 @@ class Api::V1::StarlinkActivatesController < ApplicationController
   def activate_kit
     wallet = find_wallet
     kit = current_user.starlink_kits.find_by(id: params[:kit_id])
-    kit_id = kid.id
+    kit_id = kit.id
     kit_plan_id = kit.starlink_plan_id
 
     return render json: { error: "Wallet not found" }, status: :not_found if wallet.nil?
