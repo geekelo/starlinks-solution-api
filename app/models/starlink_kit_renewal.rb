@@ -8,8 +8,8 @@ class StarlinkKitRenewal < ApplicationRecord
   include Api::V1::StarlinkKitRenewalsHelper
   include Api::V1::StarlinkKitActivationsHelper
 
-  def self.create_new_renewal(wallet, kit_plan_id, kit_id)
-    last_renewal = wallet.starlink_kit_renewals
+  def self.create_new_renewal(wallet, kit_plan_id, kit_id, kit)
+    last_renewal = kit.starlink_kit_renewals
                          .where(status: "invoice", starlink_kit_id: kit_id)
                          .order(deadline: :desc)
                          .first
