@@ -3,12 +3,14 @@ class Api::V1::StarlinkActivatesController < ApplicationController
 
   def activate_kit
     wallet = find_wallet
-    kit_id = params[:kit_id]
+    kit = current_user.starlink_kits.find_by(id: params[:kit_id])
+    kit_id = kid.id
+    kit_plan_id = kit.starlink_plan_id
 
     return render json: { error: "Wallet not found" }, status: :not_found if wallet.nil?
     return render json: { error: "Kit ID is missing" }, status: :unprocessable_entity if kit_id.blank?
 
-    StarlinkKitRenewal.create_new_renewal(wallet, kit_id)
+    StarlinkKitRenewal.create_new_renewal(wallet, kit_plan_id, kit_id)
     total_due = StarlinkKitRenewal.total_due(wallet, kit_id, current_user.starlink_plan_id)
 
 
