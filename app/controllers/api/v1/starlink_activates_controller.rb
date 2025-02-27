@@ -8,8 +8,8 @@ class Api::V1::StarlinkActivatesController < ApplicationController
     return render json: { error: "Wallet not found" }, status: :not_found if wallet.nil?
     return render json: { error: "Kit ID is missing" }, status: :unprocessable_entity if kit_id.blank?
 
-    StarlinkKitRenewal.create_new_renewal(wallet, kit_id)
-    total_due = StarlinkKitRenewal.total_due(wallet, kit_id, current_user.starlink_plan_id)
+    Api::V1::StarlinkKitActivationsHelper.create_new_renewal(wallet, kit_id)
+    total_due = Api::V1::StarlinkKitActivationsHelper.total_due(wallet, kit_id, current_user.starlink_plan_id)
 
     # Add extra 50,000 if otsp is false
     total_due += 50_000 unless current_user.otsp
@@ -38,7 +38,7 @@ class Api::V1::StarlinkActivatesController < ApplicationController
   def process_payment(wallet, amount)
     wallet.update!(balance: wallet.balance - amount)
     credit_admin_wallet(amount)
-    StarlinkKitRenewal.mark_as_paid(wallet)
+    Api::V1::StarlinkKitActivationsHelper.mark_as_paid(wallet)
     StarlinkKit.find_by(id: params[:kit_id])&.update!(status: "active")
     current_user.update!(otsp: true)
   end
