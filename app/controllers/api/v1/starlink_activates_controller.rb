@@ -11,7 +11,7 @@ class Api::V1::StarlinkActivatesController < ApplicationController
     return render json: { error: "Kit ID is missing" }, status: :unprocessable_entity if kit_id.blank?
 
     StarlinkKitRenewal.create_new_renewal(wallet, kit_plan_id, kit_id, kit)
-    total_due = StarlinkKitRenewal.total_due(wallet, kit_id, current_user.starlink_plan_id)
+    total_due = StarlinkKitRenewal.total_due(wallet, kit_id, current_user.starlink_plan_id, kit)
 
 
     # Add extra 50,000 if otsp is false
@@ -41,7 +41,7 @@ class Api::V1::StarlinkActivatesController < ApplicationController
   def process_payment(wallet, amount)
     wallet.update!(balance: wallet.balance - amount)
     credit_admin_wallet(amount)
-    StarlinkKitRenewal.mark_as_paid(wallet)
+    StarlinkKitRenewal.mark_as_paid(wallet, kit)
     current_user.update!(otsp: true)
   end
 

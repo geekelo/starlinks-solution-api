@@ -19,7 +19,7 @@ class StarlinkKitRenewal < ApplicationRecord
     if last_renewal.nil? || last_renewal.deadline < Date.today
   
       # Receipt for the current month
-      wallet.starlink_kit_renewals.create!(
+      kit.starlink_kit_renewals.create!(
         starlink_kit_id: kit_id,
         amount: plan_price,
         deadline: Date.today,
@@ -34,7 +34,7 @@ class StarlinkKitRenewal < ApplicationRecord
       days_remaining = (next_month.end_of_month.day - Date.today.day)
       invoice_amount = days_remaining * 4000
   
-      wallet.starlink_kit_renewals.create!(
+      kit.starlink_kit_renewals.create!(
         starlink_kit_id: kit_id,
         amount: invoice_amount,
         deadline: Date.today + 26.days,
@@ -50,7 +50,7 @@ class StarlinkKitRenewal < ApplicationRecord
       days_remaining = (next_month.end_of_month.day - Date.today.day)
       invoice_amount = days_remaining * 4000
   
-      wallet.starlink_kit_renewals.create!(
+      kit.starlink_kit_renewals.create!(
         starlink_kit_id: kit_id,
         amount: price_plan,
         deadline: Date.today.change(day: 26),
@@ -63,12 +63,12 @@ class StarlinkKitRenewal < ApplicationRecord
   end  
 
   # Calculate the total amount due for unpaid renewals
-  def self.total_due(wallet, kit_id, kit_plan_id)
-    unpaid_renewals_sum = wallet.starlink_kit_renewals
+  def self.total_due(wallet, kit_id, kit_plan_id, kit)
+    unpaid_renewals_sum = kit.starlink_kit_renewals
                                 .where(paid: false, starlink_kit_id: kit_id)
                                 .sum(:amount)
   
-    last_renewal = wallet.starlink_kit_renewals
+    last_renewal = kit.starlink_kit_renewals
                          .where(status: "invoice", starlink_kit_id: kit_id)
                          .order(deadline: :desc)
                          .first
@@ -83,8 +83,8 @@ class StarlinkKitRenewal < ApplicationRecord
   end
 
   # Mark all unpaid renewals as paid
-  def self.mark_as_paid(wallet)
-    wallet.starlink_kit_renewals.where(paid: false).update_all(
+  def self.mark_as_paid(wallet, kit)
+    kit.starlink_kit_renewals.where(paid: false).update_all(
       status: "receipt",
       paid: true,
       credit_admin: true,
