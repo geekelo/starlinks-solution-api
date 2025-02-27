@@ -26,6 +26,8 @@ class StarlinkKitRenewal < ApplicationRecord
         month: Date.today.month,
         status: "receipt",
         date_of_renewal: Date.today
+        starlink_user_wallet_id: wallet.id
+        starlink_user_id: wallet.starlink_user_id
       )
   
       # Invoice for next month
@@ -40,6 +42,8 @@ class StarlinkKitRenewal < ApplicationRecord
         status: "invoice",
         month: next_month.month,
         year: next_month.year,
+        starlink_user_wallet_id: wallet.id
+        starlink_user_id: wallet.starlink_user_id
       )
 
     else
@@ -55,6 +59,8 @@ class StarlinkKitRenewal < ApplicationRecord
         status: "invoice",
         month: next_month.month,
         year: next_month.year,
+        starlink_user_wallet_id: wallet.id
+        starlink_user_id: wallet.starlink_user_id
       )
     end
   end  
