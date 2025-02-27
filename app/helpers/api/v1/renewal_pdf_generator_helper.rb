@@ -1,3 +1,5 @@
+require 'prawn'
+
 module Api::V1::RenewalPdfGeneratorHelper
   def generate_renewal_pdf
     pdf = Prawn::Document.new

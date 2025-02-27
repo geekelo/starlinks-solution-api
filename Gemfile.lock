@@ -179,9 +179,14 @@ GEM
     nokogiri (1.17.2-x86_64-linux)
       racc (~> 1.4)
     ostruct (0.6.1)
+    pdf-core (0.10.0)
     pg (1.5.9)
     pp (0.6.2)
       prettyprint
+    prawn (2.5.0)
+      matrix (~> 0.4)
+      pdf-core (~> 0.10.0)
+      ttfunk (~> 1.8)
     prettyprint (0.2.0)
     psych (5.2.3)
       date
@@ -256,6 +261,8 @@ GEM
     stringio (3.1.3)
     thor (1.3.2)
     timeout (0.4.3)
+    ttfunk (1.8.0)
+      bigdecimal (~> 3.1)
     turbo-rails (2.0.11)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
@@ -300,6 +307,7 @@ DEPENDENCIES
   jbuilder
   jwt
   pg (~> 1.1)
+  prawn
   puma (>= 5.0)
   rack-cors
   rails (~> 7.1.5, >= 7.1.5.1)

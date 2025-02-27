@@ -8,7 +8,7 @@ class StarlinkKitRenewal < ApplicationRecord
   include Api::V1::StarlinkKitRenewalsHelper
   include Api::V1::StarlinkKitActivationsHelper
 
-  def self.create_new_renewal(wallet, kit_plan_id, kit_id, kit)
+  def self.create_new_renewal(wallet, kit_plan_id, total_due, kit_id, kit)
     last_renewal = kit.starlink_kit_renewals
                          .where(status: "invoice", starlink_kit_id: kit_id)
                          .order(deadline: :desc)
@@ -21,7 +21,7 @@ class StarlinkKitRenewal < ApplicationRecord
       # Receipt for the current month
       kit.starlink_kit_renewals.create!(
         starlink_kit_id: kit_id,
-        amount: plan_price,
+        amount: total_due,
         deadline: Date.today,
         month: Date.today.month,
         year: Date.today.year,

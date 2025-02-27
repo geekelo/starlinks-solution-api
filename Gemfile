@@ -72,3 +72,4 @@ gem 'jwt'
 gem 'rack-cors'
 
 gem 'twilio-ruby', '~> 7.4'
+gem 'prawn'
