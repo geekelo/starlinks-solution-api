@@ -25,7 +25,6 @@ class StarlinkKitRenewal < ApplicationRecord
         deadline: Date.today,
         month: Date.today.month,
         status: "receipt",
-        paid: true,
         date_of_renewal: Date.today
       )
   
@@ -39,7 +38,6 @@ class StarlinkKitRenewal < ApplicationRecord
         amount: invoice_amount,
         deadline: Date.today + 26.days,
         status: "invoice",
-        paid: false,
         month: next_month.month,
         year: next_month.year,
       )
@@ -55,7 +53,6 @@ class StarlinkKitRenewal < ApplicationRecord
         amount: price_plan,
         deadline: Date.today.change(day: 26),
         status: "invoice",
-        paid: false,
         month: next_month.month,
         year: next_month.year,
       )
