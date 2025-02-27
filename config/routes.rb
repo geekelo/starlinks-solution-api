@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       post "/login", to: "authentication#create"
 
       get "starlink_kit_renewals/user_kit_renewals", to: "starlink_kit_renewals#user_kit_renewals"
+      get "starlink_kit_renewals/:id/download_pdf", to: "starlink_kit_renewals#download_renewal_pdf"
       post 'starlink_activates/:kit_id/activate_kit', to: 'starlink_activates#activate_kit'
       # POST /api/v1/starlink_activates/1234-5678-9101/activate_kit
 
