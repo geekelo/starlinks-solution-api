@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       post "/signup", to: "registration#create"
       post "/login", to: "authentication#create"
 
-      get "starlink_renewals/:id", to: "starlink_renewals#user_kit_renewals"
+      get "starlink_renewals", to: "starlink_renewals#user_kit_renewals"
       post 'starlink_activates/:kit_id/activate_kit', to: 'starlink_activates#activate_kit'
       # POST /api/v1/starlink_activates/1234-5678-9101/activate_kit
 
