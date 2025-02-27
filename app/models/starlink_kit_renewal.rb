@@ -65,7 +65,7 @@ class StarlinkKitRenewal < ApplicationRecord
   # Calculate the total amount due for unpaid renewals
   def self.total_due(wallet, kit_id, kit_plan_id, kit)
     unpaid_renewals_sum = kit.starlink_kit_renewals
-                                .where(paid: false, starlink_kit_id: kit_id)
+                                .where(status: "invoice", starlink_kit_id: kit_id)
                                 .sum(:amount)
   
     last_renewal = kit.starlink_kit_renewals
@@ -84,9 +84,8 @@ class StarlinkKitRenewal < ApplicationRecord
 
   # Mark all unpaid renewals as paid
   def self.mark_as_paid(wallet, kit)
-    kit.starlink_kit_renewals.where(paid: false).update_all(
+    kit.starlink_kit_renewals.where(status: "invoice").update_all(
       status: "receipt",
-      paid: true,
       credit_admin: true,
       date_of_renewal: Date.today
     )
