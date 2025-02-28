@@ -22,7 +22,7 @@ class Api::V1::StarlinkActivatesController < ApplicationController
 
       render json: { message: "Kit activated successfully" }, status: :ok
     else
-      render json: { error: "Insufficient funds", amount: total_due, }, status: :unprocessable_entity
+      render json: { error: "Insufficient funds", amount: total_due }, status: :unprocessable_entity
     end
   end
 
