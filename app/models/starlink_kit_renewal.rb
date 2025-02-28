@@ -26,6 +26,7 @@ class StarlinkKitRenewal < ApplicationRecord
         deadline: Date.today,
         month: Date.today.month,
         status: "receipt",
+        year: Date.today.year,
         date_of_renewal: Date.today,
         starlink_user_id: kit.starlink_user_id,
         starlink_user_wallet_id: wallet.id
