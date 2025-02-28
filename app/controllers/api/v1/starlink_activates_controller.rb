@@ -17,7 +17,7 @@ class Api::V1::StarlinkActivatesController < ApplicationController
     total_due += 50_000 unless current_user.otsp
 
     if wallet_has_sufficient_funds?(wallet, total_due)
-      process_payment(wallet, total_due)
+      process_payment(wallet, total_due, kit)
       StarlinkKitRenewal.create_new_renewal(wallet, kit_plan_id, total_due, kit_id, kit)
 
       render json: { message: "Kit activated successfully" }, status: :ok
@@ -39,7 +39,7 @@ class Api::V1::StarlinkActivatesController < ApplicationController
   end
 
   # Process payment, deduct from user and credit admin
-  def process_payment(wallet, amount)
+  def process_payment(wallet, amount, kit)
     wallet.update!(balance: wallet.balance - amount)
     credit_admin_wallet(amount)
     StarlinkKitRenewal.mark_as_paid(wallet, kit)
