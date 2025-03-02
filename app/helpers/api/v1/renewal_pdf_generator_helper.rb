@@ -1,7 +1,7 @@
 require 'prawn'
 
 module Api::V1::RenewalPdfGeneratorHelper
-  def generate_renewal_pdf
+  def self.generate_renewal_pdf
     pdf = Prawn::Document.new
 
     # Load UTF-8 compatible font
@@ -24,13 +24,13 @@ module Api::V1::RenewalPdfGeneratorHelper
 
     # Renewal Details
     pdf.move_down 20
-    # pdf.text "Amount: ₦#{'%.2f' % amount.to_f}", size: 12  # ✅ FIXED
-    pdf.text "Due Date: #{deadline.strftime('%B %d, %Y') if deadline}", size: 12
-    pdf.text "Month: #{Date::MONTHNAMES[month] if month}", size: 12
-    pdf.text "Year: #{year if year}", size: 12
+    pdf.text "Amount: ₦#{'%.2f' % (amount || 0).to_f}", size: 12  # ✅ FIXED
+    pdf.text "Due Date: #{deadline&.strftime('%B %d, %Y') || 'N/A'}", size: 12
+    pdf.text "Month: #{Date::MONTHNAMES[month] || 'N/A'}", size: 12
+    pdf.text "Year: #{year || 'N/A'}", size: 12
 
     if status == "receipt"
-      pdf.text "Date of Renewal: #{date_of_renewal.strftime('%B %d, %Y') if date_of_renewal}", size: 12
+      pdf.text "Date of Renewal: #{date_of_renewal&.strftime('%B %d, %Y') || 'N/A'}", size: 12
     end
 
     # Footer
