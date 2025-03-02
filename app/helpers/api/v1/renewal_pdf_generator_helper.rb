@@ -24,7 +24,7 @@ module Api::V1::RenewalPdfGeneratorHelper
 
     # Renewal Details
     pdf.move_down 20
-    pdf.text "Amount: ₦#{'%.2f' % (renewal.amount || 0).to_f}", size: 12
+    pdf.text "Amount: ₦#{'%.2f' % renewal.amount.to_f rescue '0.00'}", size: 12  # ✅ FIXED HERE
     pdf.text "Due Date: #{renewal.deadline&.strftime('%B %d, %Y') || 'N/A'}", size: 12
     pdf.text "Month: #{Date::MONTHNAMES[renewal.month.to_i] || 'N/A'}", size: 12
     pdf.text "Year: #{renewal.year || 'N/A'}", size: 12
