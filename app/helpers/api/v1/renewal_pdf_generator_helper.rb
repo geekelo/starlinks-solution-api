@@ -13,7 +13,6 @@ module Api::V1::RenewalPdfGeneratorHelper
       pdf.stroke_horizontal_rule
       pdf.move_down 10
       pdf.text "Invoice Date: #{renewal.created_at.strftime('%B %d, %Y')}", size: 12
-      pdf.text "Customer Email: #{renewal.customer_email || 'N/A'}", size: 12
       pdf.move_down 20
 
       # Renewal Details Table
