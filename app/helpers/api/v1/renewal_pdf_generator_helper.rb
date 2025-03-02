@@ -9,7 +9,7 @@ module Api::V1::RenewalPdfGeneratorHelper
 
       pdf.move_down 30
       document_title = renewal.status == "invoice" ? "Renewal Invoice" : "Renewal Receipt"
-      pdf.text "#{document_title} - Kit ##{renewal.starlink_kit_id}", size: 20, style: :bold, align: :center
+      pdf.text "#{document_title} - Kit ##{renewal.starlink_kit.kit_number}", size: 20, style: :bold, align: :center
       pdf.move_down 10
       pdf.stroke_horizontal_rule
       pdf.move_down 10
@@ -63,6 +63,6 @@ module Api::V1::RenewalPdfGeneratorHelper
     pdf.move_down 40
     pdf.stroke_horizontal_rule
     pdf.move_down 10
-    pdf.text "Thank you for choosing Starlink Solutions!", align: :center, size: 12, style: :italic
+    pdf.text "Thank you for choosing Starlink Installation Solutions!", align: :center, size: 12, style: :italic
   end
 end
