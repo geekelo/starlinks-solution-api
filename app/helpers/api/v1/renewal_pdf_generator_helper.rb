@@ -24,7 +24,7 @@ module Api::V1::RenewalPdfGeneratorHelper
 
     # Renewal Details
     pdf.move_down 20
-    pdf.text "Amount: ₦#{'%.2f' % amount}", size: 12  # ₦ symbol will now work
+    pdf.text "Amount: ₦#{'%.2f' % (amount || 0)}", size: 12  # ₦ symbol will now work
     pdf.text "Due Date: #{deadline.strftime('%B %d, %Y')}", size: 12
     pdf.text "Month: #{Date::MONTHNAMES[month]}", size: 12
     pdf.text "Year: #{year}", size: 12
