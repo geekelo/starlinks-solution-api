@@ -29,7 +29,8 @@ class Api::V1::StarlinkKitRenewalsController < ApplicationController
       render json: { error: "Renewal not found" }, status: :not_found and return
     end
 
-    pdf_content = renewal.generate_renewal_pdf
+    pdf_content = Api::V1::RenewalPdfGeneratorHelper.generate_renewal_pdf(renewal)
+
     document_title = renewal.status == "invoice" ? "Renewal Invoice" : "Renewal Receipt"
 
     send_data pdf_content,

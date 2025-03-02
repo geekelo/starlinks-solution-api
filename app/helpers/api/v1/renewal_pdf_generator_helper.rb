@@ -1,21 +1,21 @@
 require 'prawn'
 
 module Api::V1::RenewalPdfGeneratorHelper
-  def self.generate_renewal_pdf
+  def self.generate_renewal_pdf(renewal)
     pdf = Prawn::Document.new
 
     # Load UTF-8 compatible font
     font_path = Rails.root.join("app/assets/fonts/DejaVuSans.ttf")
-    pdf.font font_path
+    pdf.font font_path if File.exist?(font_path)
 
     # Add logo (if exists)
     logo_path = Rails.root.join("app/assets/images/starlink_logo.png")
     pdf.image logo_path, width: 100, height: 100 if File.exist?(logo_path)
 
     # Header
-    document_title = status == "invoice" ? "Renewal Invoice" : "Renewal Receipt"
+    document_title = renewal.status == "invoice" ? "Renewal Invoice" : "Renewal Receipt"
     pdf.move_down 20
-    pdf.text "#{document_title} for Kit Number #{starlink_kit_id}", size: 18, style: :bold
+    pdf.text "#{document_title} for Kit Number #{renewal.starlink_kit_id}", size: 18, style: :bold
 
     # Business Address
     pdf.move_down 10
@@ -24,13 +24,13 @@ module Api::V1::RenewalPdfGeneratorHelper
 
     # Renewal Details
     pdf.move_down 20
-    pdf.text "Amount: ₦#{'%.2f' % (amount || 0).to_f}", size: 12  # ✅ FIXED
-    pdf.text "Due Date: #{deadline&.strftime('%B %d, %Y') || 'N/A'}", size: 12
-    pdf.text "Month: #{Date::MONTHNAMES[month] || 'N/A'}", size: 12
-    pdf.text "Year: #{year || 'N/A'}", size: 12
+    pdf.text "Amount: ₦#{'%.2f' % (renewal.amount || 0).to_f}", size: 12
+    pdf.text "Due Date: #{renewal.deadline&.strftime('%B %d, %Y') || 'N/A'}", size: 12
+    pdf.text "Month: #{Date::MONTHNAMES[renewal.month.to_i] || 'N/A'}", size: 12
+    pdf.text "Year: #{renewal.year || 'N/A'}", size: 12
 
-    if status == "receipt"
-      pdf.text "Date of Renewal: #{date_of_renewal&.strftime('%B %d, %Y') || 'N/A'}", size: 12
+    if renewal.status == "receipt"
+      pdf.text "Date of Renewal: #{renewal.date_of_renewal&.strftime('%B %d, %Y') || 'N/A'}", size: 12
     end
 
     # Footer
