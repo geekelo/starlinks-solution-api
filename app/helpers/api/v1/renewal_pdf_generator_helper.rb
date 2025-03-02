@@ -28,8 +28,7 @@ module Api::V1::RenewalPdfGeneratorHelper
 
     # Renewal Details
     pdf.move_down 20
-    amount = renewal.amount.to_f rescue 0.0  # ✅ Fix for nil amount
-    pdf.text "Amount: ₦#{'%.2f' % amount}", size: 12  
+    pdf.text "Amount: ₦#{renewal.amount || 'N/A'}", size: 12
 
     pdf.text "Due Date: #{renewal.deadline&.strftime('%B %d, %Y') || 'N/A'}", size: 12
 
