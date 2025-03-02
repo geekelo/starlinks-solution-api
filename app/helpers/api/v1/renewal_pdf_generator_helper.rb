@@ -24,10 +24,15 @@ module Api::V1::RenewalPdfGeneratorHelper
 
     # Renewal Details
     pdf.move_down 20
-    pdf.text "Amount: ₦#{'%.2f' % renewal.amount.to_f rescue '0.00'}", size: 12  # ✅ FIXED HERE
+    amount = renewal.amount || 0  # ✅ Ensure amount is never nil
+    pdf.text "Amount: ₦#{'%.2f' % amount.to_f}", size: 12  
+
     pdf.text "Due Date: #{renewal.deadline&.strftime('%B %d, %Y') || 'N/A'}", size: 12
-    pdf.text "Month: #{Date::MONTHNAMES[renewal.month.to_i] || 'N/A'}", size: 12
-    pdf.text "Year: #{renewal.year || 'N/A'}", size: 12
+
+    month = renewal.month.to_i if renewal.month
+    pdf.text "Month: #{Date::MONTHNAMES[month] || 'N/A'}", size: 12
+
+    pdf.text "Year: #{renewal.year.to_i if renewal.year}", size: 12
 
     if renewal.status == "receipt"
       pdf.text "Date of Renewal: #{renewal.date_of_renewal&.strftime('%B %d, %Y') || 'N/A'}", size: 12
