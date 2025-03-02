@@ -20,8 +20,8 @@ module Api::V1::RenewalPdfGeneratorHelper
       pdf.text "Renewal Details", size: 18, style: :bold
       pdf.move_down 10
       table_data = [
-        ["Item Description", "Amount"],
-        ["Starlink Kit Renewal", "₦#{renewal.amount || 'N/A'}"]
+        ["Item Description", "Amount (NGN)"],
+        ["Starlink Kit Renewal", "#{renewal.amount || 'N/A'}"]
       ]
       pdf.table(table_data, width: pdf.bounds.width) do |table|
         table.header = true
