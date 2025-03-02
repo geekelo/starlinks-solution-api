@@ -1,3 +1,5 @@
+require 'prawn'
+
 # app/models/starlink_kit_renewal.rb
 class StarlinkKitRenewal < ApplicationRecord
   belongs_to :starlink_kit
@@ -9,7 +11,19 @@ class StarlinkKitRenewal < ApplicationRecord
   include Api::V1::StarlinkKitActivationsHelper
 
 def self.generate_renewal_pdf(renewal)
-  Api::V1::RenewalPdfGeneratorHelper.handle_download_renewal_pdf(renewal)
+  pdf = Prawn::Document.new
+  pdf.text "Starlink Renewal #{renewal.status.capitalize}", size: 24, style: :bold, align: :center
+  pdf.move_down 20
+  pdf.text "Kit ID: #{renewal.starlink_kit_id}", size: 16, style: :bold
+  pdf.move_down 10
+  pdf.text "Amount: #{renewal.amount}", size: 16, style: :bold
+  pdf.move_down 10
+  pdf.text "Deadline: #{renewal.deadline}", size: 16, style: :bold
+  pdf.move_down 10
+  pdf.text "Status: #{renewal.status.capitalize}", size: 16, style: :bold
+  pdf.move_down 10
+  pdf.text "Date of Renewal: #{renewal.date_of_renewal}", size: 16, style: :bold
+  pdf.render
 end
 
 # Create a new renewal if needed (due date passed or no previous renewal)
