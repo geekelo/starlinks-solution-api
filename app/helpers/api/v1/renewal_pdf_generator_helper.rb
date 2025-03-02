@@ -1,4 +1,5 @@
 require 'prawn'
+require 'prawn/table'
 
 module Api::V1::RenewalPdfGeneratorHelper
   def self.generate_renewal_pdf(renewal)
