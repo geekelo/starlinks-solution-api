@@ -22,21 +22,7 @@ module Api::V1::RenewalPdfGeneratorHelper
     pdf.text "Starlink Solutions", size: 14, style: :bold
     pdf.text "28, Kodesho Street, Beside Ikeja Plaza, Ikeja, Lagos State", size: 12
 
-    # Renewal Details
-    pdf.move_down 20
-    amount = renewal.amount || 0  # ✅ Ensure amount is never nil
-    pdf.text "Amount: ₦#{'%.2f' % amount.to_f}", size: 12  
 
-    pdf.text "Due Date: #{renewal.deadline&.strftime('%B %d, %Y') || 'N/A'}", size: 12
-
-    month = renewal.month.to_i if renewal.month
-    pdf.text "Month: #{Date::MONTHNAMES[month] || 'N/A'}", size: 12
-
-    pdf.text "Year: #{renewal.year.to_i if renewal.year}", size: 12
-
-    if renewal.status == "receipt"
-      pdf.text "Date of Renewal: #{renewal.date_of_renewal&.strftime('%B %d, %Y') || 'N/A'}", size: 12
-    end
 
     # Footer
     pdf.move_down 30
