@@ -2,50 +2,67 @@ require 'prawn'
 
 module Api::V1::RenewalPdfGeneratorHelper
   def self.generate_renewal_pdf(renewal)
-    pdf = Prawn::Document.new
-    pdf.font "Helvetica" 
-    
-    # Load UTF-8 compatible font
-    # font_path = Rails.root.join("app/assets/fonts/DejaVuSans.ttf")
-    # if File.exist?(font_path)
-    #   pdf.font font_path
-    # else
-    #   pdf.font "Helvetica"  # Fallback to default font
-    # end
+    Prawn::Document.new do |pdf|
+      # Add Starlink logo and company details
+      add_company_info_to_pdf(pdf)
 
-    # Add logo (if exists)
-    # logo_path = Rails.root.join("app/assets/images/starlink_logo.png")
-    # pdf.image logo_path, width: 100, height: 100 if File.exist?(logo_path)
+      pdf.move_down 30
+      document_title = renewal.status == "invoice" ? "Renewal Invoice" : "Renewal Receipt"
+      pdf.text "#{document_title} - Kit ##{renewal.starlink_kit_id}", size: 20, style: :bold, align: :center
+      pdf.move_down 10
+      pdf.stroke_horizontal_rule
+      pdf.move_down 10
+      pdf.text "Invoice Date: #{renewal.created_at.strftime('%B %d, %Y')}", size: 12
+      pdf.text "Customer Email: #{renewal.customer_email || 'N/A'}", size: 12
+      pdf.move_down 20
 
-    # Header
-    document_title = renewal.status == "invoice" ? "Renewal Invoice" : "Renewal Receipt"
-    pdf.move_down 20
-    pdf.text "#{document_title} for Kit Number #{renewal.starlink_kit_id}", size: 18, style: :bold
+      # Renewal Details Table
+      pdf.text "Renewal Details", size: 18, style: :bold
+      pdf.move_down 10
+      table_data = [
+        ["Item Description", "Amount"],
+        ["Starlink Kit Renewal", "₦#{renewal.amount || 'N/A'}"]
+      ]
+      pdf.table(table_data, width: pdf.bounds.width) do |table|
+        table.header = true
+        table.row_colors = %w[f0f0f0 ffffff]
+        table.cell_style = { borders: [:top, :bottom], border_width: 1, padding: [5, 10] }
+      end
 
-    # Business Address
-    pdf.move_down 10
-    pdf.text "Starlink Solutions", size: 14, style: :bold
-    pdf.text "28, Kodesho Street, Beside Ikeja Plaza, Ikeja, Lagos State", size: 12
+      # Additional Details
+      pdf.move_down 20
+      pdf.text "Due Date: #{renewal.deadline&.strftime('%B %d, %Y') || 'N/A'}", size: 12
+      pdf.text "Month: #{Date::MONTHNAMES[renewal.month.to_i] || 'N/A'}", size: 12
+      pdf.text "Year: #{renewal.year || 'N/A'}", size: 12
 
-    # Renewal Details
-    pdf.move_down 20
-    pdf.text "Amount: ₦#{renewal.amount || 'N/A'}", size: 12
+      if renewal.status == "receipt"
+        pdf.text "Date of Renewal: #{renewal.date_of_renewal&.strftime('%B %d, %Y') || 'N/A'}", size: 12
+      end
 
-    pdf.text "Due Date: #{renewal.deadline&.strftime('%B %d, %Y') || 'N/A'}", size: 12
+      # Footer
+      add_footer_to_pdf(pdf)
+    end.render
+  end
 
-    month = renewal.month.to_i if renewal.month.present?
-    pdf.text "Month: #{Date::MONTHNAMES[month] || 'N/A'}", size: 12
+  private
 
-    pdf.text "Year: #{renewal.year.present? ? renewal.year.to_i : 'N/A'}", size: 12
-
-    if renewal.status == "receipt"
-      pdf.text "Date of Renewal: #{renewal.date_of_renewal&.strftime('%B %d, %Y') || 'N/A'}", size: 12
+  def self.add_company_info_to_pdf(pdf)
+    logo_path = Rails.root.join("app/assets/images/starlink_logo.png")
+    if File.exist?(logo_path)
+      pdf.image logo_path, width: 100, height: 100, at: [0, pdf.cursor]
     end
 
-    # Footer
-    pdf.move_down 30
-    pdf.text "Thank you for choosing Starlink Solutions.", align: :center
+    pdf.bounding_box([120, pdf.cursor], width: pdf.bounds.width - 120) do
+      pdf.text "Starlink Solutions", size: 24, style: :bold
+      pdf.text "28, Kodesho Street, Beside Ikeja Plaza, Ikeja, Lagos State", size: 12, style: :italic
+      pdf.move_down 20
+    end
+  end
 
-    pdf.render
+  def self.add_footer_to_pdf(pdf)
+    pdf.move_down 40
+    pdf.stroke_horizontal_rule
+    pdf.move_down 10
+    pdf.text "Thank you for choosing Starlink Solutions!", align: :center, size: 12, style: :italic
   end
 end
