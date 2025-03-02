@@ -3,18 +3,19 @@ require 'prawn'
 module Api::V1::RenewalPdfGeneratorHelper
   def self.generate_renewal_pdf(renewal)
     pdf = Prawn::Document.new
-
+    pdf.font "Helvetica" 
+    
     # Load UTF-8 compatible font
-    font_path = Rails.root.join("app/assets/fonts/DejaVuSans.ttf")
-    if File.exist?(font_path)
-      pdf.font font_path
-    else
-      pdf.font "Helvetica"  # Fallback to default font
-    end
+    # font_path = Rails.root.join("app/assets/fonts/DejaVuSans.ttf")
+    # if File.exist?(font_path)
+    #   pdf.font font_path
+    # else
+    #   pdf.font "Helvetica"  # Fallback to default font
+    # end
 
     # Add logo (if exists)
-    logo_path = Rails.root.join("app/assets/images/starlink_logo.png")
-    pdf.image logo_path, width: 100, height: 100 if File.exist?(logo_path)
+    # logo_path = Rails.root.join("app/assets/images/starlink_logo.png")
+    # pdf.image logo_path, width: 100, height: 100 if File.exist?(logo_path)
 
     # Header
     document_title = renewal.status == "invoice" ? "Renewal Invoice" : "Renewal Receipt"
