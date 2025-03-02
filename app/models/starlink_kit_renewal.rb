@@ -8,6 +8,10 @@ class StarlinkKitRenewal < ApplicationRecord
   include Api::V1::StarlinkKitRenewalsHelper
   include Api::V1::StarlinkKitActivationsHelper
 
+def self.generate_renewal_pdf(renewal)
+  handle_download_renewal_pdf(renewal)
+end
+
 # Create a new renewal if needed (due date passed or no previous renewal)
   def self.create_new_renewal(wallet, kit_plan_id, total_due, kit_id, kit)
     last_renewal = kit.starlink_kit_renewals

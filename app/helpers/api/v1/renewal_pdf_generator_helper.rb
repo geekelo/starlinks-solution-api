@@ -1,7 +1,7 @@
 require 'prawn'
 
 module Api::V1::RenewalPdfGeneratorHelper
-  def self.generate_renewal_pdf(renewal)
+  def handle_download_renewal_pdf(renewal)
     pdf = Prawn::Document.new
 
     # Load UTF-8 compatible font
@@ -22,7 +22,16 @@ module Api::V1::RenewalPdfGeneratorHelper
     pdf.text "Starlink Solutions", size: 14, style: :bold
     pdf.text "28, Kodesho Street, Beside Ikeja Plaza, Ikeja, Lagos State", size: 12
 
+    # Renewal Details
+    pdf.move_down 20
+    pdf.text "Amount: ₦#{'%.2f' % renewal.amount.to_f rescue '0.00'}", size: 12  # ✅ FIXED HERE
+    pdf.text "Due Date: #{renewal.deadline&.strftime('%B %d, %Y') || 'N/A'}", size: 12
+    pdf.text "Month: #{Date::MONTHNAMES[renewal.month.to_i] || 'N/A'}", size: 12
+    pdf.text "Year: #{renewal.year || 'N/A'}", size: 12
 
+    if renewal.status == "receipt"
+      pdf.text "Date of Renewal: #{renewal.date_of_renewal&.strftime('%B %d, %Y') || 'N/A'}", size: 12
+    end
 
     # Footer
     pdf.move_down 30
