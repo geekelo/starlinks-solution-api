@@ -9,7 +9,7 @@ class StarlinkKitRenewal < ApplicationRecord
   include Api::V1::StarlinkKitActivationsHelper
 
 def self.generate_renewal_pdf(renewal)
-  handle_download_renewal_pdf(renewal)
+  Api::V1::RenewalPdfGeneratorHelper.handle_download_renewal_pdf(renewal)
 end
 
 # Create a new renewal if needed (due date passed or no previous renewal)
