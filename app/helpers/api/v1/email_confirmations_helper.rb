@@ -1,7 +1,7 @@
 module Api::V1::EmailConfirmationsHelper
 
   def generate_confirmation_token
-    token = SecureRandom.hex(20) # Generate the token first
+    token = rand(100_000..999_999).to_s # Generate 6-digit OTP
     self.update!(
       confirmation_token: token,
       confirmation_sent_at: Time.current
