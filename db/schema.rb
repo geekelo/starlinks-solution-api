@@ -28,8 +28,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_03_113316) do
     t.date "date_of_renewal"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.date "start_date", null: false
-    t.date "end_date", null: false
+    t.date "start_date"
+    t.date "end_date"
     t.index ["starlink_kit_id"], name: "index_starlink_kit_renewals_on_starlink_kit_id"
     t.index ["starlink_user_id"], name: "index_starlink_kit_renewals_on_starlink_user_id"
     t.index ["starlink_user_wallet_id"], name: "index_starlink_kit_renewals_on_starlink_user_wallet_id"
