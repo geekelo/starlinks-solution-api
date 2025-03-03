@@ -14,7 +14,7 @@ class Api::V1::EmailConfirmationsController < ApplicationController
   end
 
   def confirm_user_email
-    unless current_user.confirmation_token == params[:token]
+    unless current_user.confirmation_token == params[:code]
       return render json: { error: "Invalid confirmation token" }, status: :unauthorized
     end
   
