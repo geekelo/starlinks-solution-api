@@ -6,7 +6,7 @@ class WhatsappSender
     auth_token = ENV['TWILIO_AUTH_TOKEN']
     @client = Twilio::REST::Client.new(account_sid, auth_token)
 
-    message = @client.messages.create(
+    message = @client.api.v2010.messages.create(
       # from: 'whatsapp:+14155238886', # Twilio Sandbox Number
       from: 'whatsapp:+15557296949',
       to: "whatsapp:#{to}",
