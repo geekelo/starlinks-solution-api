@@ -94,5 +94,7 @@ class StarlinkKitRenewal < ApplicationRecord
       credit_admin: true,
       date_of_renewal: Date.today
     )
+
+    kit.update!(status: 'active')
   end  
 end

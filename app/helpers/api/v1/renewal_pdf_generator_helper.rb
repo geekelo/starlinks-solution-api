@@ -53,7 +53,7 @@ module Api::V1::RenewalPdfGeneratorHelper
     end
 
     pdf.bounding_box([120, pdf.cursor], width: pdf.bounds.width - 120) do
-      pdf.text "Starlink Solutions", size: 24, style: :bold
+      pdf.text "Starlink Installation Solutions", size: 24, style: :bold
       pdf.text "28, Kodesho Street, Beside Ikeja Plaza, Ikeja, Lagos State", size: 12, style: :italic
       pdf.move_down 20
     end
