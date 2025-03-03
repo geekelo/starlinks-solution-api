@@ -1,0 +1,6 @@
+<h1>Invoice Reminder</h1>
+<p>Dear <%= @user.name %>,</p>
+<p>This is a reminder that your invoice (<b>#<%= @invoice.id %></b>) is due on <b><%= @invoice.due_date.strftime("%B %d, %Y") %></b>.</p>
+<p>Amount Due: <b>$<%= @invoice.amount %></b></p>
+<p>Please ensure payment is made before the due date to avoid penalties.</p>
+<p>Thank you.</p>

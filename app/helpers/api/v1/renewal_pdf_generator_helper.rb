@@ -47,7 +47,7 @@ module Api::V1::RenewalPdfGeneratorHelper
   private
 
   def self.add_company_info_to_pdf(pdf)
-    logo_path = Rails.root.join("app/assets/images/starlink_logo.png")
+    logo_path = Rails.root.join("app/assets/images/starlink-icon.png")
     if File.exist?(logo_path)
       pdf.image logo_path, width: 100, height: 100, at: [0, pdf.cursor]
     end

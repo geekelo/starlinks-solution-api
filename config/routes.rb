@@ -15,6 +15,10 @@ Rails.application.routes.draw do
       post 'starlink_activates/:kit_id/activate_kit', to: 'starlink_activates#activate_kit'
       # POST /api/v1/starlink_activates/1234-5678-9101/activate_kit
 
+      namespace :admin do
+        post "send_invoice_reminders", to: "invoice_reminders#send_reminders"
+      end
+
       resources :password_resets, only: [:create, :update]
       
       resources :email_confirmations do
