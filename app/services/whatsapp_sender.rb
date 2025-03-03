@@ -10,7 +10,8 @@ class WhatsappSender
       from: '+18573406807',
       to: to,
     )
-    puts message.sid
+    
+    message.sid
 
   end
 end
