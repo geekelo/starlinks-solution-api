@@ -7,7 +7,7 @@ class Api::V1::WhatsappConfirmationsController < ApplicationController
 
     if user
       otp = user.generate_whatsapp_confirmation_token
-      message_sid = WhatsappSender.send_otp(user.whatsapp_number, otp)
+      message_sid = WhatsappSender.send_otp(user.phone_number, otp)
 
       if message_sid
         render json: { message: 'OTP sent successfully via WhatsApp.', sid: message_sid }, status: :ok
