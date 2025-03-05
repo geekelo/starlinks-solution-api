@@ -12,7 +12,7 @@ class Api::V1::PasswordResetsController < ApplicationController
   end
 
   def update
-    user = StarlinkUser.find_by(reset_password_token: params[:token])
+    user = StarlinkUser.find_by(reset_password_token: params[:code])
 
     if user&.password_reset_token_valid?
       if user.reset_password(params[:password])
