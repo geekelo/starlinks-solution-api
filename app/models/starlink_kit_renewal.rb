@@ -42,7 +42,7 @@ class StarlinkKitRenewal < ApplicationRecord
       kit.starlink_kit_renewals.create!(
         starlink_kit_id: kit_id,
         amount: invoice_amount,
-        deadline: (Date.today.next_month - 1.day)
+        deadline: (Date.today.next_month - 1.day),
         start_date: Date.today.next_month,
         end_date: next_month.end_of_month,
         status: "invoice",
