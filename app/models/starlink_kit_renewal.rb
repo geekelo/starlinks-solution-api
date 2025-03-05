@@ -25,7 +25,7 @@ class StarlinkKitRenewal < ApplicationRecord
         amount: total_due,
         deadline: Date.today,
         start_date: Date.today,
-        end_date: Date.today + 30.days,
+        end_date: (Date.today.next_month - 1.day),
         month: Date.today.month,
         status: "receipt",
         year: Date.today.year,
@@ -36,14 +36,14 @@ class StarlinkKitRenewal < ApplicationRecord
   
       # Invoice for next month
       next_month = Date.today.next_month
-      days_remaining = (next_month.end_of_month.day - Date.today.day)
+      days_remaining = (31 - Date.today.day)
       invoice_amount = days_remaining * 4000
   
       kit.starlink_kit_renewals.create!(
         starlink_kit_id: kit_id,
         amount: invoice_amount,
-        deadline: Date.today + 30.days,
-        start_date: Date.today + 31.days,
+        deadline: (Date.today.next_month - 1.day)
+        start_date: Date.today.next_month,
         end_date: next_month.end_of_month,
         status: "invoice",
         month: next_month.month,
@@ -54,7 +54,7 @@ class StarlinkKitRenewal < ApplicationRecord
 
     else
       # If there's a previous renewal, use its deadline + 1 day as start_date
-      start_date = last_renewal.deadline + 1.day
+      start_date = Date.today.next_month.beginning_of_month # last_renewal.deadline + 1.day
       next_month = start_date.next_month
       deadline = next_month.end_of_month
   
