@@ -19,7 +19,7 @@ Rails.application.routes.draw do
         post "send_invoice_reminders", to: "invoice_reminders#send_reminders"
       end
 
-      resources :password_resets, only: [:create, :update]
+      resources :password_resets, only: [:create, :update], param: :token
       
       resources :email_confirmations do
         collection do
