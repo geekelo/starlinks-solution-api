@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_03_113316) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_08_160925) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -47,6 +47,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_03_113316) do
     t.uuid "starlink_user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "otsp", default: false
     t.index ["starlink_plan_id"], name: "index_starlink_kits_on_starlink_plan_id"
     t.index ["starlink_user_id"], name: "index_starlink_kits_on_starlink_user_id"
   end
@@ -88,7 +89,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_03_113316) do
     t.datetime "confirmation_sent_at"
     t.string "whatsapp_confirmation_token"
     t.datetime "whatsapp_confirmation_sent_at"
-    t.boolean "otsp", default: false
     t.index ["confirmation_token"], name: "index_starlink_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_starlink_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_starlink_users_on_reset_password_token", unique: true

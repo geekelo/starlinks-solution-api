@@ -14,7 +14,7 @@ class Api::V1::StarlinkActivatesController < ApplicationController
 
 
     # Add extra 50,000 if otsp is false
-    total_due += 50_000 unless current_user.otsp
+    total_due += 50_000 unless kit.otsp
 
     if wallet_has_sufficient_funds?(wallet, total_due)
       process_payment(wallet, total_due, kit) # this must come first before creating a new renewal
@@ -43,7 +43,7 @@ class Api::V1::StarlinkActivatesController < ApplicationController
     wallet.update!(balance: wallet.balance - amount)
     credit_admin_wallet(amount)
     StarlinkKitRenewal.mark_as_paid(wallet, kit)
-    current_user.update!(otsp: true)
+    kit.update!(otsp: true)
   end
 
   # Credit admin wallet
