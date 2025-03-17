@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_08_160925) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_17_173820) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "starlink_admin_withdrawals", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "starlink_user_wallet_id", null: false
+    t.decimal "amount", precision: 15, scale: 2, null: false
+    t.string "purpose", null: false
+    t.date "withdrawal_date", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["starlink_user_wallet_id"], name: "index_starlink_admin_withdrawals_on_starlink_user_wallet_id"
+  end
 
   create_table "starlink_kit_renewals", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "deadline", null: false
@@ -111,6 +121,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_08_160925) do
     t.index ["transaction_id"], name: "index_starlink_wallet_fundings_on_transaction_id", unique: true
   end
 
+  add_foreign_key "starlink_admin_withdrawals", "starlink_user_wallets"
   add_foreign_key "starlink_kit_renewals", "starlink_kits"
   add_foreign_key "starlink_kit_renewals", "starlink_user_wallets"
   add_foreign_key "starlink_kit_renewals", "starlink_users"

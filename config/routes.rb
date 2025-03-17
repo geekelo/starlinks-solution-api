@@ -17,6 +17,37 @@ Rails.application.routes.draw do
 
       namespace :admin do
         post "send_invoice_reminders", to: "invoice_reminders#send_reminders"
+      
+           # Funding Kit Requests
+        resources :funding_kit_requests, only: [] do
+          collection do
+            get 'pending_paid'          # GET /api/v1/admin/funding_kit_requests/pending_paid
+            get 'pending_starlink_kits' # GET /api/v1/admin/funding_kit_requests/pending_starlink_kits
+          end
+          member do
+            patch 'update_funding_request' # PATCH /api/v1/admin/funding_kit_requests/:id/update_funding_request
+            patch 'update_kit_status'      # PATCH /api/v1/admin/funding_kit_requests/:id/update_kit_status
+          end
+        end
+  
+        # Kit Transfers
+        resources :kit_transfers, only: [] do
+          collection do
+            post 'transfer' # POST /api/v1/admin/kit_transfers/transfer
+          end
+        end
+
+        # Kit Records
+        resources :kit_records, only: [:index, :update]
+
+        # Wallet Histories
+        resources :wallet_histories, only: [:index]
+
+        # Wallet Withdrawals
+        resources :starlink_admin_withdrawals, only: [:create]
+
+        # User records
+        resources :user_records, only: [:index, :update]
       end
 
       resources :password_resets, only: [:create, :update], param: :code

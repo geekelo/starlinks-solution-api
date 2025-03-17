@@ -48,26 +48,6 @@ class Api::V1::StarlinkWalletFundingsController < ApplicationController
     end
   end
 
-  def approve_request
-    funding = StarlinkWalletFunding.find(params[:id])
-  
-    if funding.update(update_funding_params)
-      # Only update the user's wallet balance if the status is "approved"
-      if funding.status == "approved"
-        user_wallet = funding.starlink_user_wallet
-        if user_wallet
-          user_wallet.update!(balance: user_wallet.balance + funding.amount)
-        end
-      end
-  
-      render json: { message: 'Funding status updated successfully.', funding: funding }, status: :ok
-    else
-      render json: { errors: funding.errors.full_messages }, status: :unprocessable_entity
-    end
-  rescue StandardError => e
-    render json: { error: e.message }, status: :internal_server_error
-  end
-  
   private
 
   def funding_params
@@ -76,9 +56,5 @@ class Api::V1::StarlinkWalletFundingsController < ApplicationController
 
   def confirm_funding_params
     params.require(:starlink_wallet_funding).permit(:paid)
-  end
-
-  def update_funding_params
-    params.require(:starlink_wallet_funding).permit(:status)
   end
 end
