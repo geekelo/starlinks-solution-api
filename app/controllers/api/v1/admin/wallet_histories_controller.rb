@@ -1,4 +1,4 @@
-class Api::V1::Admin::WalletHistoryController < ApplicationController
+class Api::V1::Admin::WalletHistoriesController < ApplicationController
   before_action :authenticate_token!
 
   # GET /api/v1/admin/wallet_history
