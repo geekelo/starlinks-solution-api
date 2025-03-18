@@ -41,7 +41,11 @@ Rails.application.routes.draw do
         resources :kit_records, only: [:index, :update]
 
         # Wallet Histories
-        resources :wallet_histories, only: [:index]
+        resources :wallet_histories, only: [:index] do
+          collection do
+            get :admin_balance
+          end
+        end
 
         # Wallet Withdrawals
         resources :starlink_admin_withdrawals, only: [:create]

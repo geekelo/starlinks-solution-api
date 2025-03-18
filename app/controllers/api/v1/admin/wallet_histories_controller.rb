@@ -25,5 +25,11 @@ class Api::V1::Admin::WalletHistoriesController < ApplicationController
     render json: { error: e.message }, status: :internal_server_error
   end
 
+  def admin_balance
+    admin_balance = StarlinkUserWallet.find_by(wallet_id: 'byaste').balance
 
+    render json: { admin_balance: admin_balance }, status: :ok
+  rescue StandardError => e
+    render json: { error: e.message }, status: :internal
+  end
 end
