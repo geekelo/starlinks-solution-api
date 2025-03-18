@@ -5,13 +5,13 @@ class Api::V1::Admin::WalletHistoriesController < ApplicationController
   def index
     wallet_history = {
       fundings = StarlinkWalletFunding.where(status: 'approved')
-      .joins(starlink_user_wallet: :starlink_user) # Ensure proper join path
+      .joins(starlink_user_wallet: :starlink_user)
       .select('starlink_wallet_fundings.id, 
                starlink_wallet_fundings.amount, 
                starlink_wallet_fundings.funding_date, 
                starlink_wallet_fundings.source, 
                starlink_wallet_fundings.created_at, 
-               starlink_users.email'),
+               starlink_users.email')
 
       renewals: StarlinkKitRenewal.where(status: 'receipt')
                                   .joins(starlink_kit: :starlink_user)
