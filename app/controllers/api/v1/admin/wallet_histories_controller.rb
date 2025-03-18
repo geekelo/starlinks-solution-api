@@ -11,7 +11,7 @@ class Api::V1::Admin::WalletHistoriesController < ApplicationController
                starlink_wallet_fundings.funding_date, 
                starlink_wallet_fundings.source, 
                starlink_wallet_fundings.created_at, 
-               starlink_users.email') # Reference email correctly
+               starlink_users.email'),
 
       renewals: StarlinkKitRenewal.where(status: 'receipt')
                                   .joins(starlink_kit: :starlink_user)
