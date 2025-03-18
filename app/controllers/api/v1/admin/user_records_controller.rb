@@ -3,7 +3,7 @@ class Api::V1::Admin::UserRecordsController < ApplicationController
 
   # GET /api/v1/admin/user_records
   def index
-    user_records = StarlinkUser.where(role: 'user').includes(:kits)
+    user_records = StarlinkUser.where(role: 'user').includes(:starlink_kits)
 
     user_data = user_records.map do |user|
       {
