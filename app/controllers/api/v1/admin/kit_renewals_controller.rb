@@ -4,21 +4,27 @@ class Api::V1::Admin::KitRenewalsController < ApplicationController
 
   # GET /api/v1/admin/kit_renewals
   def index
-    user = StarlinkUser.find_by(email: params[:email])
+    if params[:kit_number].present?
+      kit = StarlinkKit.find_by(kit_number: params[:kit_number])
   
-    if user.nil?
-      return render json: { error: 'User not found' }, status: :not_found
+      if kit.nil?
+        return render json: { error: 'Kit not found' }, status: :not_found
+      end
+  
+      kit_renewals = StarlinkKitRenewal
+                       .where(starlink_kit_id: kit.id)
+                       .select('starlink_kit_renewals.*, starlink_kits.kit_number')
+                       .joins(:starlink_kit)
+    else
+      kit_renewals = StarlinkKitRenewal
+                       .select('starlink_kit_renewals.*, starlink_kits.kit_number')
+                       .joins(:starlink_kit)
     end
   
-    renewals = StarlinkKitRenewal
-                 .joins(:starlink_user)
-                 .where(starlink_users: { id: user.id })
-                 .select('starlink_kit_renewals.*, starlink_users.email AS user_email')
-  
-    render json: renewals, status: :ok
+    render json: kit_renewals, status: :ok
   rescue StandardError => e
     render json: { error: e.message }, status: :internal_server_error
-  end  
+  end   
 
   # POST /api/v1/admin/kit_renewals
   def create
