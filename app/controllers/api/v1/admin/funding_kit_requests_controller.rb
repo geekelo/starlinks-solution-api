@@ -3,7 +3,7 @@ class Api::V1::Admin::FundingKitRequestsController < ApplicationController
 
   # GET /api/v1/starlink_user_wallet_fundings/pending_paid
   def pending_paid
-    fundings = StarlinkUserWalletFunding.where(paid: "yes", status: "pending")
+    fundings = StarlinkWalletFunding.where(paid: "yes", status: "pending")
     render json: { success: true, fundings: fundings }, status: :ok
   rescue StandardError => e
     render json: { success: false, error: e.message }, status: :unprocessable_entity

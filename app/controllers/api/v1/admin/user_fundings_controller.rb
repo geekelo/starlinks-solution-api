@@ -4,11 +4,14 @@ class Api::V1::Admin::UserFundingsController < ApplicationController
 
   # GET /api/v1/admin/user_fundings
   def index
-    fundings = StarlinkWalletFunding.all
+    fundings = StarlinkWalletFunding
+                 .joins(starlink_user_wallet: :starlink_user)
+                 .select('starlink_wallet_fundings.*, starlink_users.email AS user_email')
+  
     render json: fundings, status: :ok
   rescue StandardError => e
     render json: { error: e.message }, status: :internal_server_error
-  end
+  end  
 
   # POST /api/v1/admin/user_fundings
   def create
