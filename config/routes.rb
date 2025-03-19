@@ -52,6 +52,9 @@ Rails.application.routes.draw do
 
         # User records
         resources :user_records, only: [:index, :update]
+      
+        # User Fundings
+        resources :user_fundings, only: [:index, :create, :update]
       end
 
       resources :password_resets, only: [:create, :update], param: :code
