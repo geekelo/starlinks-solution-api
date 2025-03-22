@@ -1,6 +1,6 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins ['http://localhost:3000', 'https://starlink-solution-admin.vercel.app/', 'https://portal.starlinksolutions.ng'] # Add your frontend origin(s)
+    origins ['http://localhost:3000', 'https://starlink-solution-admin.vercel.app', 'https://portal.starlinksolutions.ng'] # Add your frontend origin(s)
 
     resource '/api/*',
       headers: :any,
