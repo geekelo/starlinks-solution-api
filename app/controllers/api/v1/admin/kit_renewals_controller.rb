@@ -43,6 +43,7 @@ class Api::V1::Admin::KitRenewalsController < ApplicationController
       end_date: params[:kit_renewal][:end_date],
       month: params[:kit_renewal][:month],
       year: params[:kit_renewal][:year],
+      deadline: params[:kit_renewal][:deadline]
     }
   
     if params[:status] == "receipt"
@@ -52,7 +53,6 @@ class Api::V1::Admin::KitRenewalsController < ApplicationController
     else
       kit_renewal_params[:status] = "invoice"
       kit_renewal_params[:credit_admin] = false
-      kit_renewal_params[:deadline] = params[:kit_renewal][:deadline]
     end
   
     kit_renewal = StarlinkKitRenewal.new(kit_renewal_params)
