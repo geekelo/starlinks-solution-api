@@ -18,6 +18,7 @@ class Api::V1::Admin::WalletHistoriesController < ApplicationController
                                   .select('starlink_kit_renewals.id, 
                                            starlink_kit_renewals.amount, 
                                            starlink_kit_renewals.date_of_renewal, 
+                                            starlink_kit_renewals.start_date,
                                            starlink_kit_renewals.created_at, 
                                            starlink_kits.kit_number, 
                                            starlink_users.email AS user_email'),
