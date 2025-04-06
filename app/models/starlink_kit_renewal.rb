@@ -17,7 +17,7 @@ class StarlinkKitRenewal < ApplicationRecord
     
     plan_price = StarlinkPlan.find_by(id: kit_plan_id)&.price || 0
 
-    if last_renewal.nil? || last_renewal.deadline < Date.today
+    if last_renewal.nil? || last_renewal&.end_date < Date.today
   
       # Receipt for the current month
       kit.starlink_kit_renewals.create!(
@@ -53,10 +53,10 @@ class StarlinkKitRenewal < ApplicationRecord
       )
 
     else
-      # If there's a previous renewal, use its deadline + 1 day as start_date
-      start_date = Date.today.next_month.beginning_of_month # last_renewal.deadline + 1.day
+      # Invoice for next month
+      start_date = Date.today.next_month.beginning_of_month # first day of next month
       next_month = start_date.next_month
-      deadline = next_month.end_of_month
+      deadline = next_month.end_of_month # last day of next month
   
       kit.starlink_kit_renewals.create!(
         starlink_kit_id: kit_id,
@@ -76,17 +76,28 @@ class StarlinkKitRenewal < ApplicationRecord
   # Calculate the total amount due for unpaid renewals
   def self.total_due(wallet, kit_id, kit_plan_id, kit)
     unpaid_renewals_sum = kit.starlink_kit_renewals
-                                .where(status: "invoice", starlink_kit_id: kit_id)
-                                .sum(:amount)
+                          .where(status: "invoice", starlink_kit_id: kit_id)
+                          .sum(:amount)
   
-    last_renewal = kit.starlink_kit_renewals
-                         .where(status: "receipt", starlink_kit_id: kit_id)
-                         .order(deadline: :desc)
-                         .first
+    last_receipt = kit.starlink_kit_renewals
+                          .where(status: "receipt", starlink_kit_id: kit_id)
+                          .order(deadline: :desc)
+                          .first
+
+    last_invoice = kit.starlink_kit_renewals
+                          .where(status: "invoice", starlink_kit_id: kit_id)
+                          .order(deadline: :desc)
+                          .first                     
   
     plan_price = StarlinkPlan.find_by(id: kit_plan_id)&.price || 0
   
-    if last_renewal.nil? || last_renewal.deadline < Date.today
+    if last_receipt.nil? || last_invoice.nil?
+      plan_price
+    elsif last_invoice.start_date <= Date.today && last_invoice.end_date >= Date.today
+      # If the last invoice's start date is today or earlier, add the plan price
+      unpaid_renewals_sum
+    elsif last_invoice.end_date < Date.today
+      # If the last invoice's end date is before today, add the plan price
       unpaid_renewals_sum + plan_price
     else
       unpaid_renewals_sum

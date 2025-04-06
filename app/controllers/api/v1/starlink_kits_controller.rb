@@ -75,8 +75,9 @@ class Api::V1::StarlinkKitsController < ApplicationController
   
     if renewal && renewal.deadline < Date.today
       kit.update!(status: 'deactivated')
+      renewal.destroy unless renewal.prorated
     end
-  end
+  end  
 
   def all_kits_params
     params.require(:kit_user).permit(:starlink_user_id)

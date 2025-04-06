@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_17_173820) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_05_235757) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -40,6 +40,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_17_173820) do
     t.datetime "updated_at", null: false
     t.date "start_date"
     t.date "end_date"
+    t.boolean "prorated", default: false
     t.index ["starlink_kit_id"], name: "index_starlink_kit_renewals_on_starlink_kit_id"
     t.index ["starlink_user_id"], name: "index_starlink_kit_renewals_on_starlink_user_id"
     t.index ["starlink_user_wallet_id"], name: "index_starlink_kit_renewals_on_starlink_user_wallet_id"
