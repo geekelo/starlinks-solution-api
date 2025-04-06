@@ -9,7 +9,7 @@ class Api::V1::Admin::InvoiceRemindersController < ApplicationController
     .where(deadline: days_before_due.map { |d| today + d })
 
     invoices.each do |invoice|
-      InvoiceMailer.reminder_email(invoice).deliver_later
+      InvoiceMailer.reminder_email(invoice).deliver_now
     end
 
     render json: { message: "Invoice reminders sent." }, status: :ok
