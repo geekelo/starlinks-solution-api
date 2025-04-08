@@ -89,7 +89,7 @@ class StarlinkKitRenewal < ApplicationRecord
                           .order(deadline: :desc)
                           .first                     
   
-    plan_price = StarlinkPlan.find_by(id: kit_plan_id)&.price || 0
+    plan_price = kit.starlink_plan.price || 0
   
     if last_receipt.nil?
       plan_price
