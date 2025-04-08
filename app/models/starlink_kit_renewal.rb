@@ -9,13 +9,13 @@ class StarlinkKitRenewal < ApplicationRecord
   include Api::V1::StarlinkKitActivationsHelper
 
 # Create a new renewal if needed (due date passed or no previous renewal)
-  def self.create_new_renewal(wallet, kit_plan_id, total_due, kit_id, kit)
+  def self.create_new_renewal(wallet, kit_plan, total_due, kit_id, kit)
     last_renewal = kit.starlink_kit_renewals
                          .where(status: "invoice", starlink_kit_id: kit_id)
                          .order(deadline: :desc)
                          .first
     
-    plan_price = StarlinkPlan.find_by(id: kit_plan_id)&.price || 0
+    plan_price = kit_plan&.price || 0
 
     if last_renewal.nil? || last_renewal&.end_date < Date.today
   
@@ -74,7 +74,7 @@ class StarlinkKitRenewal < ApplicationRecord
   end  
 
   # Calculate the total amount due for unpaid renewals
-  def self.total_due(wallet, kit_id, kit_plan_id, kit)
+  def self.total_due(wallet, kit_id, kit_plan, kit)
     unpaid_renewals_sum = kit.starlink_kit_renewals
                           .where(status: "invoice", starlink_kit_id: kit_id)
                           .sum(:amount)
@@ -89,7 +89,7 @@ class StarlinkKitRenewal < ApplicationRecord
                           .order(deadline: :desc)
                           .first                     
   
-    plan_price = kit.starlink_plan.price || 0
+    plan_price = kit_plan&.price || 0
   
     if last_receipt.nil?
       plan_price

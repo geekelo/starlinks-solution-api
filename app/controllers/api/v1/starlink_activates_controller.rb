@@ -5,12 +5,12 @@ class Api::V1::StarlinkActivatesController < ApplicationController
     wallet = find_wallet
     kit = current_user.starlink_kits.find_by(id: params[:kit_id])
     kit_id = kit.id
-    kit_plan_id = kit.starlink_plan_id
+    kit_plan = kit.starlink_plan
 
     return render json: { error: "Wallet not found" }, status: :not_found if wallet.nil?
     return render json: { error: "Kit ID is missing" }, status: :unprocessable_entity if kit_id.blank?
 
-    total_due = StarlinkKitRenewal.total_due(wallet, kit_id, kit_plan_id, kit)
+    total_due = StarlinkKitRenewal.total_due(wallet, kit_id, kit_plan, kit)
 
 
     # Add extra 50,000 if otsp is false
@@ -18,7 +18,7 @@ class Api::V1::StarlinkActivatesController < ApplicationController
 
     if wallet_has_sufficient_funds?(wallet, total_due)
       process_payment(wallet, total_due, kit) # this must come first before creating a new renewal
-      StarlinkKitRenewal.create_new_renewal(wallet, kit_plan_id, total_due, kit_id, kit)
+      StarlinkKitRenewal.create_new_renewal(wallet, kit_plan, total_due, kit_id, kit)
 
       render json: { message: "Kit activated successfully" }, status: :ok
     else
