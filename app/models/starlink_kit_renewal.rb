@@ -91,13 +91,16 @@ class StarlinkKitRenewal < ApplicationRecord
   
     plan_price = StarlinkPlan.find_by(id: kit_plan_id)&.price || 0
   
-    if last_receipt.nil? || last_invoice.nil?
+    if last_receipt.nil?
       plan_price
-    elsif last_invoice.start_date <= Date.today && last_invoice.end_date >= Date.today
-      # If the last invoice's start date is today or earlier, add the plan price
+    elsif last_invoice.nil?
+      # If there is no last invoice, add the plan price
+      plan_price
+    elsif last_invoice&.start_date <= Date.today && last_invoice&.end_date > Date.today
+      # If the last invoice's (prorated) start date is today or earlier, add the plan price.
       unpaid_renewals_sum
-    elsif last_invoice.end_date < Date.today
-      # If the last invoice's end date is before today, add the plan price
+    elsif last_invoice&.prorated && last_invoice.end_date <= Date.today
+      # If the last invoice's end date is today or before today, add the plan price
       unpaid_renewals_sum + plan_price
     else
       unpaid_renewals_sum
