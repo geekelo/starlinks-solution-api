@@ -10,6 +10,7 @@ class Api::V1::Admin::FundingKitRequestsController < ApplicationController
     formatted_fundings = fundings.map do |funding|
       {
         id: funding.id,
+        transaction_id: funding.transaction_id,
         amount: funding.amount,
         status: funding.status,
         paid: funding.paid,
