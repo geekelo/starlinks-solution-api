@@ -3,11 +3,29 @@ class Api::V1::Admin::FundingKitRequestsController < ApplicationController
 
   # GET /api/v1/starlink_user_wallet_fundings/pending_paid
   def pending_paid
-    fundings = StarlinkWalletFunding.where(paid: "yes", status: "need_approval")
-    render json: { success: true, fundings: fundings }, status: :ok
+    fundings = StarlinkWalletFunding
+                 .includes(:starlink_user, :starlink_user_wallet) # assuming associations exist
+                 .where(paid: "yes", status: "need_approval")
+  
+    formatted_fundings = fundings.map do |funding|
+      {
+        id: funding.id,
+        amount: funding.amount,
+        status: funding.status,
+        paid: funding.paid,
+        created_at: funding.created_at,
+        updated_at: funding.updated_at,
+        user_name: funding.starlink_user&.name,
+        user_email: funding.starlink_user&.email,
+        wallet_id: funding.starlink_user_wallet&.wallet_id,
+        wallet_balance: funding.starlink_user_wallet&.balance
+      }
+    end
+  
+    render json: { success: true, fundings: formatted_fundings }, status: :ok
   rescue StandardError => e
     render json: { success: false, error: e.message }, status: :unprocessable_entity
-  end
+  end  
 
   # Fetch all Starlink Kits where status = "pending"
   def pending_starlink_kits
