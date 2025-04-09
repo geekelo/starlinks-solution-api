@@ -29,6 +29,13 @@ Rails.application.routes.draw do
             patch 'update_kit_status'      # PATCH /api/v1/admin/funding_kit_requests/:id/update_kit_status
           end
         end
+
+        # Deactivate expired kits
+        resources :kit_deactivations do
+          collection do
+            get 'deactivate_expired_kits' # GET /api/v1/admin/kit_deactivations/deactivate_expired_kits
+          end
+        end
   
         # Kit Transfers
         resources :kit_transfers, only: [] do
