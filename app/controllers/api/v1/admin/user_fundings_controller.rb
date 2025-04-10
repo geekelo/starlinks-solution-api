@@ -46,6 +46,9 @@ class Api::V1::Admin::UserFundingsController < ApplicationController
     )
 
     if funding.save
+      if funding.status == "approved"
+        wallet.update!(balance: wallet.balance + funding.amount)
+      end
       render json: { message: "Funding created successfully for #{user.email}", funding: funding }, status: :created
     else
       render json: { errors: funding.errors.full_messages }, status: :unprocessable_entity
