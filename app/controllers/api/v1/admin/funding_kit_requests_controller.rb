@@ -60,7 +60,7 @@ class Api::V1::Admin::FundingKitRequestsController < ApplicationController
     starlink_kit = StarlinkKit.find_by(id: params[:id])
   
     if starlink_kit
-      if starlink_kit.update(status: params[:status])
+      if starlink_kit.update(update_kit_params)
         render json: { message: 'Kit status updated successfully.', kit: starlink_kit }, status: :ok
       else
         render json: { errors: starlink_kit.errors.full_messages }, status: :unprocessable_entity
@@ -73,6 +73,10 @@ class Api::V1::Admin::FundingKitRequestsController < ApplicationController
   private
 
   def update_funding_params
-    params.require(:starlink_wallet_funding).permit(:status)
+    params.require(:starlink_wallet_funding).permit(:status, :amount)
+  end
+
+  def update_kit_params
+    params.require(:starlink_kit).permit(:status, :starlink_plan_id)
   end
 end
