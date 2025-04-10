@@ -30,6 +30,14 @@ Rails.application.routes.draw do
           end
         end
 
+        # Kit Autorenews and single force renews
+        resources :kit_autorenews, only: [] do
+          collection do
+            get 'auto_renew_kits' # GET /api/v1/admin/kit_autorenews/auto_renew_kits
+            post 'renew_specific_kit' # POST /api/v1/admin/kit_autorenews/renew_specific_kit
+          end
+        end
+
         # Deactivate expired kits
         resources :kit_deactivations do
           collection do
