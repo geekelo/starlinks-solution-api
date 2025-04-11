@@ -38,9 +38,9 @@ class Api::V1::Admin::KitAutorenewsController < ApplicationController
     kit_id = kit.id
     success = activate_kit(wallet, kit_plan, kit_id, kit)
     if success
-      render json: { message: "Kit auto-renewed successfully" }, status: :ok
+      render json: { message: "Kit autregnewed successfully" }, status: :ok
     else
-      render json: { error: "Failed to auto-renew kit" }, status: :unprocessable_entity
+      render json: { error: "Failed to renew kit due to insufficient funds" }, status: :unprocessable_entity
     end
   end
 
