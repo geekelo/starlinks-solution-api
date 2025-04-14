@@ -64,6 +64,15 @@ class Api::V1::StarlinkKitsController < ApplicationController
       render json: { exists: false, message: 'Kit number is available.' }, status: :ok
     end
   end
+
+  def set_auto_renew
+    starlink_kit = current_user.starlink_kits.find_by(id: params[:id])
+    if starlink_kit.update(auto_renew: params[:auto_renew])
+      render json: { message: 'Auto-renew status updated successfully.' }, status: :ok
+    else
+      render json: { errors: starlink_kit.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
   
   private
 

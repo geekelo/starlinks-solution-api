@@ -114,6 +114,7 @@ Rails.application.routes.draw do
         collection do
           put :kit_address_change_request
           get :check_kit_number
+          put :set_auto_renew
         end
       end
     end
