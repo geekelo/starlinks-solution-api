@@ -1,6 +1,6 @@
 class Api::V1::Admin::KitRenewalsController < ApplicationController
   before_action :authenticate_token!
-  before_action :set_kit_renewal, only: [:update]
+  before_action :set_kit_renewal, only: [:update, :destroy]
 
   # GET /api/v1/admin/kit_renewals
   def index
@@ -86,6 +86,15 @@ class Api::V1::Admin::KitRenewalsController < ApplicationController
       render json: { errors: @kit_renewal.errors.full_messages }, status: :unprocessable_entity
     end
   end
+
+# DELETE /api/v1/admin/kit_renewals/:id
+def destroy
+  if @kit_renewal.destroy
+    render json: { message: "Kit renewal deleted successfully" }, status: :ok
+  else
+    render json: { errors: @kit_renewal.errors.full_messages }, status: :unprocessable_entity
+  end
+end
 
   private
 
