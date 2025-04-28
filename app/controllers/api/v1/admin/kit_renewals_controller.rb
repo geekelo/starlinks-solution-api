@@ -98,6 +98,6 @@ class Api::V1::Admin::KitRenewalsController < ApplicationController
   end
 
   def kit_renewal_params
-    params.require(:kit_renewal).permit(:amount, :credit_admin, :start_date, :end_date, :month, :year)
+    params.require(:kit_renewal).permit(:amount, :credit_admin, :start_date, :end_date, :month, :year, :deadline)
   end
 end
