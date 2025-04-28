@@ -72,7 +72,7 @@ Rails.application.routes.draw do
         resources :user_fundings, only: [:index, :create, :update]
 
         # Kit Renewals
-        resources :kit_renewals, only: [:index, :create, :update]
+        resources :kit_renewals, only: [:index, :create, :update, :destroy]
       end
 
       resources :password_resets, only: [:create, :update], param: :code
