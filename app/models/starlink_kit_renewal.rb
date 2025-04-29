@@ -48,7 +48,8 @@ class StarlinkKitRenewal < ApplicationRecord
         month: next_month.month,
         year: next_month.year,
         starlink_user_id: kit.starlink_user_id,
-        starlink_user_wallet_id: wallet.id
+        starlink_user_wallet_id: wallet.id,
+        prorated: true
       )
 
     else
@@ -61,7 +62,7 @@ class StarlinkKitRenewal < ApplicationRecord
         starlink_kit_id: kit_id,
         amount: plan_price,
         start_date: start_date,
-        deadline: (deadline - 1.day),
+        deadline: (start_date - 1.day),
         end_date: deadline, # last day of next month
         status: "invoice",
         month: next_month.month,
