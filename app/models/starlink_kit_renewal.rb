@@ -8,13 +8,14 @@ class StarlinkKitRenewal < ApplicationRecord
 
 # Create a new renewal if needed (due date passed or no previous renewal)
   def self.create_new_renewal(wallet, kit_plan, total_due, kit_id, kit)
+    # always be receipt. 
     last_renewal = kit.starlink_kit_renewals
                          .where(status: "receipt", starlink_kit_id: kit_id)
                          .order(deadline: :desc)
                          .first
     
     plan_price = kit_plan&.price || 0
-
+    # if payment is done late (after end date) or a fresh user
     if last_renewal.nil? || last_renewal&.end_date < Date.today
   
       # Receipt for the current month
