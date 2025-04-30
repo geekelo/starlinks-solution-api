@@ -54,16 +54,16 @@ class StarlinkKitRenewal < ApplicationRecord
 
     else
       # Invoice for next month
-      start_date = Date.today.next_month.beginning_of_month # first day of next month
-      next_month = Date.today.next_month
-      deadline = start_date.end_of_month # last day of next month
+      next_month = last_renewal.end_date.next_month
+      start_date = next_month.beginning_of_month # first day of next month
+      end_date = start_date.end_of_month # last day of next month
   
       kit.starlink_kit_renewals.create!(
         starlink_kit_id: kit_id,
         amount: plan_price,
         start_date: start_date,
         deadline: (start_date - 1.day),
-        end_date: deadline, # last day of next month
+        end_date: end_date, # last day of next month
         status: "invoice",
         month: next_month.month,
         year: next_month.year,
