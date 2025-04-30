@@ -108,6 +108,6 @@ end
   end
 
   def kit_renewal_params
-    params.require(:kit_renewal).permit(:amount, :credit_admin, :start_date, :end_date, :month, :year, :deadline, :prorated)
+    params.require(:kit_renewal).permit(:amount, :credit_admin, :start_date, :end_date, :month, :year, :deadline, :prorated, :status)
   end
 end
