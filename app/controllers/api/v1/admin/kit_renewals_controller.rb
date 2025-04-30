@@ -53,6 +53,7 @@ class Api::V1::Admin::KitRenewalsController < ApplicationController
       starlink_kit_id: kit.id,
       starlink_user_wallet_id: wallet.id,
       amount: amount,
+      prorated: params[:prorated],
       start_date: params[:kit_renewal][:start_date],
       end_date: params[:kit_renewal][:end_date],
       month: params[:kit_renewal][:month],
@@ -107,6 +108,6 @@ end
   end
 
   def kit_renewal_params
-    params.require(:kit_renewal).permit(:amount, :credit_admin, :start_date, :end_date, :month, :year, :deadline)
+    params.require(:kit_renewal).permit(:amount, :credit_admin, :start_date, :end_date, :month, :year, :deadline, :prorated)
   end
 end
