@@ -13,6 +13,12 @@ class StarlinkKitRenewal < ApplicationRecord
                          .where(status: "receipt", starlink_kit_id: kit_id)
                          .order(deadline: :desc)
                          .first
+
+    # if invoice exists. 
+    last_invoice = kit.starlink_kit_renewals
+                         .where(status: "invoice", starlink_kit_id: kit_id)
+                         .order(deadline: :desc)
+                         .first
     
     plan_price = kit_plan&.price || 0
    
@@ -88,7 +94,7 @@ class StarlinkKitRenewal < ApplicationRecord
     else
       # Invoice for next month
       next_month = last_renewal.end_date.next_month
-      start_date = next_month.beginning_of_month # first day of next month
+      start_date = last_renewal.end_date.next_month.beginning_of_month # first day of next month
       end_date = start_date.end_of_month # last day of next month
   
       kit.starlink_kit_renewals.create!(
