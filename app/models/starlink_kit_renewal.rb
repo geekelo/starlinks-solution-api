@@ -66,7 +66,7 @@ class StarlinkKitRenewal < ApplicationRecord
         end_date: last_renewal.end_date >= Date.today ? last_renewal.end_date + 32.days : (Date.today.next_month - 1.day),
         status: "invoice",
         month: last_renewal.end_date >= Date.today ? Date.today.next_month.month : Date.today.month,
-        year: last_renewal.end_date >= Date.today ? next_month.year : Date.today.year,
+        year: last_renewal.end_date >= Date.today ? Date.today.next_month.year : Date.today.year,
         starlink_user_id: kit.starlink_user_id,
         starlink_user_wallet_id: wallet.id
       )
