@@ -14,6 +14,8 @@ class Api::V1::Admin::KitRecordsController < ApplicationController
         owner_email: kit.starlink_user.email,
         owner_phone_number: kit.starlink_user.phone_number,
         status: kit.status,
+        plan: kit.starlink_plan&.name,
+        service_line_number: kit.service_line_number,
         address: kit.address,
         company_name: kit.company_name,
         company_number: kit.company_number,
