@@ -49,6 +49,7 @@ Rails.application.routes.draw do
         resources :kit_transfers, only: [] do
           collection do
             post 'transfer' # POST /api/v1/admin/kit_transfers/transfer
+            post 'add_kit_to_user' # POST /api/v1/admin/kit_transfers/add_kit_to_user
           end
         end
 
