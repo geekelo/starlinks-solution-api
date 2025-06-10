@@ -21,6 +21,19 @@ class StarlinkKitRenewal < ApplicationRecord
                          .first
     
     plan_price = kit_plan&.price || 0
+
+        prorata_daily_price = 
+      if plan_price === 120000
+        4000
+      elsif plan_price === 89000
+        3000
+      elsif plan_price === 210000
+        7000
+      elsif plan_price === 610000
+        20000
+      else
+        0
+      end
    
     # if payment is done late (after end date) or a fresh user
     if last_renewal.nil?
@@ -42,7 +55,7 @@ class StarlinkKitRenewal < ApplicationRecord
       # Invoice for next month
       next_month = Date.today.next_month
       days_remaining = (31 - Date.today.day)
-      invoice_amount = days_remaining * 4000
+      invoice_amount = days_remaining * prorata_daily_price
   
       kit.starlink_kit_renewals.create!(
         starlink_kit_id: kit_id,
@@ -75,7 +88,7 @@ class StarlinkKitRenewal < ApplicationRecord
         # Prorated Invoice
         next_month = Date.today.next_month
         days_remaining = (31 - Date.today.day)
-        invoice_amount = days_remaining * 4000
+        invoice_amount = days_remaining * prorata_daily_price
     
         kit.starlink_kit_renewals.create!(
           starlink_kit_id: kit_id,

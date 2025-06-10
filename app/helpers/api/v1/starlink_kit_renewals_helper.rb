@@ -7,6 +7,18 @@ module Api::V1::StarlinkKitRenewalsHelper
                          .first
     
     plan_price = StarlinkPlan.find_by(id: kit_plan_id)&.price || 0
+    prorata_daily_price = 
+      if plan_price === 120000
+        4000
+      elsif plan_price === 89000
+        3000
+      elsif plan_price === 210000
+        7000
+      elsif plan_price === 610000
+        20000
+      else
+        0
+      end
 
     if last_renewal.nil? || last_renewal.deadline < Date.today
   
