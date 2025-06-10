@@ -26,16 +26,19 @@ class Api::V1::Admin::KitTransfersController < ApplicationController
 
   def add_kit_to_user
     if StarlinkKit.exists?(kit_number: starlink_kit_params[:kit_number])
-      render json: { exists: true, message: 'Kit number already exists.' }, status: :unprocessable_entity and return
-    else
-      user = StarlinkUser.find_by(email: params[:user_email])
-      starlink_kit = user.starlink_kits.new(starlink_kit_params)
-
-      if starlink_kit.save
-        return render json: { message: "Kit successfully added to #{user.email}." }, status: :ok
-      end
+      return render json: { exists: true, message: 'Kit number already exists.' }, status: :unprocessable_entity
     end
-    render json: { errors: starlink_kit.errors.full_messages }, status: :unprocessable_entity
+  
+    user = StarlinkUser.find_by(email: params[:user_email])
+    return render json: { error: 'User not found.' }, status: :not_found unless user
+  
+    starlink_kit = user.starlink_kits.new(starlink_kit_params)
+  
+    if starlink_kit.save
+      render json: { message: "Kit successfully added to #{user.email}." }, status: :ok
+    else
+      render json: { errors: starlink_kit.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   private
