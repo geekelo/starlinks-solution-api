@@ -30,12 +30,16 @@ class Api::V1::Admin::KitRecordsController < ApplicationController
     # filter
     if params[:filter].present?
       kit_data = kit_data.where(status: params[:filter][:status]) if params[:filter][:status].present?
-      kit_data = kit_data.where(owner_id: params[:filter][:owner_id]) if params[:filter][:owner_id].present?
+      kit_data = kit_data.where(address: params[:filter][:kit_number]) if params[:filter][:address].present?
       kit_data = kit_data.where(owner_name: params[:filter][:owner_name]) if params[:filter][:owner_name].present?
       kit_data = kit_data.where(owner_email: params[:filter][:owner_email]) if params[:filter][:owner_email].present?
       kit_data = kit_data.where(owner_phone_number: params[:filter][:owner_phone_number]) if params[:filter][:owner_phone_number].present?
       kit_data = kit_data.where(plan: params[:filter][:plan]) if params[:filter][:plan].present?
-      kit_data = kit_data.where(service_line_number: params[:filter][:service_line_number]) if params[:filter][:service_line_number].present?
+      kit_data = kit_data.where(created_at: params[:filter][:date_added]) if params[:filter][:date_added].present?
+      # month added: example: 09
+      kit_data = kit_data.where(created_at: params[:filter][:month_added]) if params[:filter][:month_added].present?
+      # year added: example: 2025
+      kit_data = kit_data.where(created_at: params[:filter][:year_added]) if params[:filter][:year_added].present?
     end
 
     # pagination
