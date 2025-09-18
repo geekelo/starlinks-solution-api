@@ -70,7 +70,8 @@ gem 'active_model_serializers'
 gem 'bcrypt'
 gem 'jwt'
 gem 'rack-cors'
-
+gem 'kaminari'
 gem 'twilio-ruby', '~> 7.4'
 gem 'prawn'
 gem 'prawn-table'
+

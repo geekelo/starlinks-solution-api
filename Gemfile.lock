@@ -139,6 +139,18 @@ GEM
     jsonapi-renderer (0.2.2)
     jwt (2.10.1)
       base64
+    kaminari (1.2.2)
+      activesupport (>= 4.1.0)
+      kaminari-actionview (= 1.2.2)
+      kaminari-activerecord (= 1.2.2)
+      kaminari-core (= 1.2.2)
+    kaminari-actionview (1.2.2)
+      actionview
+      kaminari-core (= 1.2.2)
+    kaminari-activerecord (1.2.2)
+      activerecord
+      kaminari-core (= 1.2.2)
+    kaminari-core (1.2.2)
     logger (1.6.6)
     loofah (2.24.0)
       crass (~> 1.0.2)
@@ -296,7 +308,7 @@ PLATFORMS
   arm-linux
   arm64-darwin
   x86-linux
-  x86_64-darwin
+  x86_64-darwin-23
   x86_64-linux
 
 DEPENDENCIES
@@ -308,6 +320,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   jwt
+  kaminari
   pg (~> 1.1)
   prawn
   prawn-table

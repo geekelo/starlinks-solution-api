@@ -27,7 +27,21 @@ class Api::V1::Admin::KitRecordsController < ApplicationController
       }
     end
 
-    render json: kit_data, status: :ok
+    # filter
+    if params[:filter].present?
+      kit_data = kit_data.where(status: params[:filter][:status]) if params[:filter][:status].present?
+      kit_data = kit_data.where(owner_id: params[:filter][:owner_id]) if params[:filter][:owner_id].present?
+      kit_data = kit_data.where(owner_name: params[:filter][:owner_name]) if params[:filter][:owner_name].present?
+      kit_data = kit_data.where(owner_email: params[:filter][:owner_email]) if params[:filter][:owner_email].present?
+      kit_data = kit_data.where(owner_phone_number: params[:filter][:owner_phone_number]) if params[:filter][:owner_phone_number].present?
+      kit_data = kit_data.where(plan: params[:filter][:plan]) if params[:filter][:plan].present?
+      kit_data = kit_data.where(service_line_number: params[:filter][:service_line_number]) if params[:filter][:service_line_number].present?
+    end
+
+    # pagination
+    kit_data = kit_data.paginate(page: params[:page], per_page: params[:per_page] || 50)
+
+    render json: { kits: kit_data, total_pages: kit_data.total_pages, total_count: kit_data.total_count }, status: :ok
   rescue StandardError => e
     render json: { error: e.message }, status: :internal_server_error
   end

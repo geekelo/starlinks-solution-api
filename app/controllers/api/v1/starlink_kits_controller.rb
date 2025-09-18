@@ -8,7 +8,11 @@ class Api::V1::StarlinkKitsController < ApplicationController
       if starlink_kits.present?
          # Check and deactivate overdue kits
         starlink_kits.each { |kit| check_and_deactivate_kit(kit) }
-        render json: starlink_kits, status: :ok
+
+        # pagination
+        starlink_kits = starlink_kits.paginate(page: params[:page], per_page: params[:per_page] || 50)
+
+        render json: { kits: starlink_kits, total_pages: starlink_kits.total_pages, total_count: starlink_kits.total_count }, status: :ok
       else
         render json: { message: 'No kits found.' }, status: :ok
       end
