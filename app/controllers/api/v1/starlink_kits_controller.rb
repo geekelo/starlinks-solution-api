@@ -21,6 +21,7 @@ class Api::V1::StarlinkKitsController < ApplicationController
     end
   end  
 
+  
   def show
     if params[:id].present?
       kit = current_user.starlink_kits.find_by(id: params[:id])
