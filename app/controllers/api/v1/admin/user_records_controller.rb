@@ -22,7 +22,7 @@ class Api::V1::Admin::UserRecordsController < ApplicationController
     end
   
     # pagination (do this before mapping)
-    user_records = user_records.paginate(page: params[:page], per_page: params[:per_page] || 50)
+    user_records = user_records.page(params[:page]).per(params[:per_page] || 50)
   
     user_data = user_records.map do |user|
       {
