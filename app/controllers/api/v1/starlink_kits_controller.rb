@@ -4,14 +4,16 @@ class Api::V1::StarlinkKitsController < ApplicationController
   def index
     user = current_user
     if user
+      # Get user's kits with pagination first (using correct Kaminari syntax)
       starlink_kits = StarlinkKit.where(starlink_user_id: user.id)
-      if starlink_kits.present?
-         # Check and deactivate overdue kits
-        starlink_kits.each { |kit| check_and_deactivate_kit(kit) }
+                                .includes(:starlink_kit_renewals)
+                                .page(params[:page])
+                                .per(params[:per_page] || 50)
 
-        # pagination
-        starlink_kits = starlink_kits.paginate(page: params[:page], per_page: params[:per_page] || 50)
+      # Check and deactivate overdue kits for current page only (performance optimization)
+      starlink_kits.each { |kit| check_and_deactivate_kit(kit) }
 
+      if starlink_kits.any?
         render json: { kits: starlink_kits, total_pages: starlink_kits.total_pages, total_count: starlink_kits.total_count }, status: :ok
       else
         render json: { message: 'No kits found.' }, status: :ok
@@ -47,12 +49,23 @@ class Api::V1::StarlinkKitsController < ApplicationController
   end
 
   def destroy
-    starlink_kit = StarlinkKit.find(params[:id])
-    starlink_kit.destroy
+    starlink_kit = current_user.starlink_kits.find_by(id: params[:id])
+    
+    if starlink_kit
+      starlink_kit.destroy
+      render json: { message: 'Kit deleted successfully.' }, status: :ok
+    else
+      render json: { error: 'Kit not found or not authorized.' }, status: :not_found
+    end
   end
 
   def kit_address_change_request
-    starlink_kit = StarlinkKit.find(params[:id])
+    starlink_kit = current_user.starlink_kits.find_by(id: params[:id])
+    
+    if starlink_kit.nil?
+      return render json: { error: 'Kit not found or not authorized.' }, status: :not_found
+    end
+    
     if starlink_kit.update(starlink_kit_address_params)
       render json: starlink_kit
     else
