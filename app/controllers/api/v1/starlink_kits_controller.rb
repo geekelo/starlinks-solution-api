@@ -39,6 +39,10 @@ class Api::V1::StarlinkKitsController < ApplicationController
   end  
 
   def create
+    if StarlinkKit.where("kit_number ILIKE ?", "%#{starlink_kit_params[:kit_number]}%").exists?
+      return render json: { exists: true, message: 'Kit number already exists.' }, status: :unprocessable_entity
+    end
+
     starlink_kit = current_user.starlink_kits.new(starlink_kit_params)
   
     if starlink_kit.save
@@ -76,7 +80,7 @@ class Api::V1::StarlinkKitsController < ApplicationController
   def check_kit_number
     kit_number = params[:kit_number]
   
-    if kit_number.present? && StarlinkKit.exists?(kit_number: kit_number)
+    if kit_number.present? && StarlinkKit.where("kit_number ILIKE ?", "%#{kit_number}%").exists?
       render json: { exists: true, message: 'Kit number already exists.' }, status: :ok
     else
       render json: { exists: false, message: 'Kit number is available.' }, status: :ok
