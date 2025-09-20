@@ -67,6 +67,15 @@ class Api::V1::Admin::UserRecordsController < ApplicationController
     end
   end
 
+  def destroy
+    user = StarlinkUser.find_by(id: params[:id], role: 'user')
+    if user.destroy
+      render json: { message: 'User deleted successfully.' }, status: :ok
+    else
+      render json: { error: 'User not found.' }, status: :not_found
+    end
+  end
+
   private
 
   def user_params

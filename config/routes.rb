@@ -54,7 +54,7 @@ Rails.application.routes.draw do
         end
 
         # Kit Records
-        resources :kit_records, only: [:index, :update]
+        resources :kit_records, only: [:index, :update, :destroy]
 
         # Wallet Histories
         resources :wallet_histories, only: [:index] do
@@ -67,7 +67,7 @@ Rails.application.routes.draw do
         resources :starlink_admin_withdrawals, only: [:create]
 
         # User records
-        resources :user_records, only: [:index, :update]
+        resources :user_records, only: [:index, :update, :destroy]
       
         # User Fundings
         resources :user_fundings, only: [:index, :create, :update]

@@ -86,6 +86,15 @@ class Api::V1::Admin::KitRecordsController < ApplicationController
     end
   end
 
+  def destroy
+    kit = StarlinkKit.find_by(id: params[:id])
+    if kit.destroy
+      render json: { message: 'Kit deleted successfully.' }, status: :ok
+    else
+      render json: { error: 'Kit not found.' }, status: :not_found
+    end
+  end
+
   private
 
   def kit_params

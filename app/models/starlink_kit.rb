@@ -1,8 +1,8 @@
 # app/models/starlink_kit.rb
 class StarlinkKit < ApplicationRecord
-  belongs_to :starlink_user, optional: true, dependent: :destroy
+  belongs_to :starlink_user, optional: true,
   belongs_to :starlink_plan, optional: true  
-  has_many :starlink_kit_renewals
+  has_many :starlink_kit_renewals, dependent: :destroy
 
   before_validation :set_default_plan, on: :create
 
