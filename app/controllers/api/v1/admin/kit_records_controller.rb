@@ -36,6 +36,7 @@ class Api::V1::Admin::KitRecordsController < ApplicationController
     end
 
     # Apply pagination at database level (CRITICAL for performance)
+    kit_records = kit_records.order(created_at: :desc)
     kit_records = kit_records.page(params[:page]).per(params[:per_page] || 50)
   
     # Transform to hash format efficiently
