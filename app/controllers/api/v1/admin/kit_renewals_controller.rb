@@ -64,7 +64,7 @@ class Api::V1::Admin::KitRenewalsController < ApplicationController
 
     if params[:status] == "receipt"
       kit_renewal_params[:status] = "receipt"
-      kit_renewal_params[:date_of_renewal] = params[:kit_renewal][:date_of_renewal] || Date.today
+      kit_renewal_params[:date_of_renewal] = params[:date_of_renewal] || Date.today
     else
       kit_renewal_params[:status] = "invoice"
       kit_renewal_params[:credit_admin] = false
@@ -81,7 +81,7 @@ class Api::V1::Admin::KitRenewalsController < ApplicationController
 
   # PATCH/PUT /api/v1/admin/kit_renewals/:id
   def update
-    if @kit_renewal.update(kit_renewal_params)
+    if @kit_renewal.update(kit_renewal_params).merge(date_of_renewal: params[:date_of_renewal])
       render json: { message: "Kit renewal updated successfully", kit_renewal: @kit_renewal }, status: :ok
     else
       render json: { errors: @kit_renewal.errors.full_messages }, status: :unprocessable_entity
