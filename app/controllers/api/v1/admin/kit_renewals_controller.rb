@@ -81,7 +81,14 @@ class Api::V1::Admin::KitRenewalsController < ApplicationController
 
   # PATCH/PUT /api/v1/admin/kit_renewals/:id
   def update
-    if @kit_renewal.update(kit_renewal_params).merge(date_of_renewal: params[:date_of_renewal])
+    update_params = kit_renewal_params
+    
+    # Add date_of_renewal if provided
+    if params[:date_of_renewal].present?
+      update_params = update_params.merge(date_of_renewal: params[:date_of_renewal])
+    end
+    
+    if @kit_renewal.update(update_params)
       render json: { message: "Kit renewal updated successfully", kit_renewal: @kit_renewal }, status: :ok
     else
       render json: { errors: @kit_renewal.errors.full_messages }, status: :unprocessable_entity
