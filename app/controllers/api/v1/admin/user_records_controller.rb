@@ -44,8 +44,9 @@ class Api::V1::Admin::UserRecordsController < ApplicationController
     render json: {
       user_data: user_data,
       total_pages: user_records.total_pages,
-      total_count: user_records.total_entries # will_paginate uses total_entries
+      total_count: user_records.total_count
     }, status: :ok
+    
   
   rescue StandardError => e
     render json: { error: e.message }, status: :internal_server_error
