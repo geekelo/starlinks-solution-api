@@ -3,17 +3,23 @@ class Api::V1::Admin::KitRecordsController < ApplicationController
 
   # GET /api/v1/admin/kit_records
   def index
-    kit_records = StarlinkKit.joins(:starlink_user, :starlink_kit_renewals)
-  
+    # Build the base query with proper includes to avoid N+1 queries
+    kit_records = StarlinkKit.includes(
+      :starlink_user, 
+      :starlink_plan,
+      starlink_kit_renewals: []
+    )
+
+    # Apply database-level filtering first for better performance
     if params[:filter].present?
       filters = params[:filter]
   
       kit_records = kit_records.where(status: filters[:status]) if filters[:status].present?
       kit_records = kit_records.where("starlink_kits.address ILIKE ?", "%#{filters[:address]}%") if filters[:address].present?
-      kit_records = kit_records.where("starlink_users.name ILIKE ?", "%#{filters[:owner_name]}%") if filters[:owner_name].present?
-      kit_records = kit_records.where("starlink_users.email ILIKE ?", "%#{filters[:owner_email]}%") if filters[:owner_email].present?
-      kit_records = kit_records.where("starlink_users.phone_number ILIKE ?", "%#{filters[:owner_phone_number]}%") if filters[:owner_phone_number].present?
-      kit_records = kit_records.where(plan: filters[:plan]) if filters[:plan].present?
+      kit_records = kit_records.joins(:starlink_user).where("starlink_users.name ILIKE ?", "%#{filters[:owner_name]}%") if filters[:owner_name].present?
+      kit_records = kit_records.joins(:starlink_user).where("starlink_users.email ILIKE ?", "%#{filters[:owner_email]}%") if filters[:owner_email].present?
+      kit_records = kit_records.joins(:starlink_user).where("starlink_users.phone_number ILIKE ?", "%#{filters[:owner_phone_number]}%") if filters[:owner_phone_number].present?
+      kit_records = kit_records.joins(:starlink_plan).where("starlink_plans.name ILIKE ?", "%#{filters[:plan]}%") if filters[:plan].present?
   
       # Date filters
       if filters[:date_added].present?
@@ -28,15 +34,19 @@ class Api::V1::Admin::KitRecordsController < ApplicationController
         kit_records = kit_records.where("EXTRACT(YEAR FROM starlink_kits.created_at) = ?", filters[:year_added].to_i)
       end
     end
+
+    # Apply pagination at database level (CRITICAL for performance)
+    kit_records = kit_records.page(params[:page]).per(params[:per_page] || 50)
   
+    # Transform to hash format efficiently
     kit_data = kit_records.map do |kit|
       {
         id: kit.id,
         kit_number: kit.kit_number,
-        owner_id: kit.starlink_user.id,
-        owner_name: kit.starlink_user.name,
-        owner_email: kit.starlink_user.email,
-        owner_phone_number: kit.starlink_user.phone_number,
+        owner_id: kit.starlink_user&.id,
+        owner_name: kit.starlink_user&.name,
+        owner_email: kit.starlink_user&.email,
+        owner_phone_number: kit.starlink_user&.phone_number,
         status: kit.status,
         plan: kit.starlink_plan&.name,
         service_line_number: kit.service_line_number,
@@ -51,13 +61,10 @@ class Api::V1::Admin::KitRecordsController < ApplicationController
       }
     end
   
-    # pagination
-    kit_data = kit_data.paginate(page: params[:page], per_page: params[:per_page] || 50)
-  
     render json: {
       kits: kit_data,
-      total_pages: kit_data.total_pages,
-      total_count: kit_data.total_count
+      total_pages: kit_records.total_pages,
+      total_count: kit_records.total_count
     }, status: :ok
   
   rescue StandardError => e
