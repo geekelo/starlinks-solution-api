@@ -14,6 +14,7 @@ class Api::V1::Admin::KitRecordsController < ApplicationController
     if params[:filter].present?
       filters = params[:filter]
   
+      kit_records = kit_records.where(kit_number: filters[:kit_number]) if filters[:kit_number].present?
       kit_records = kit_records.where(status: filters[:status]) if filters[:status].present?
       kit_records = kit_records.where("starlink_kits.address ILIKE ?", "%#{filters[:address]}%") if filters[:address].present?
       kit_records = kit_records.joins(:starlink_user).where("starlink_users.name ILIKE ?", "%#{filters[:owner_name]}%") if filters[:owner_name].present?
