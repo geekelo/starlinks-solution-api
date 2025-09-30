@@ -74,4 +74,4 @@ gem 'kaminari'
 gem 'twilio-ruby', '~> 7.4'
 gem 'prawn'
 gem 'prawn-table'
-
+gem 'sendgrid-ruby'
