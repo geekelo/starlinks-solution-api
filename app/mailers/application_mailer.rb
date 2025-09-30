@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'Starlink Solutions <starlinkisolutions@gmail.com>'
+  default from: 'Starlink Solutions <billing@starlinksolutions.ng>'
   layout 'mailer'
 end
