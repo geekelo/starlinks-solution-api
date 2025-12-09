@@ -94,4 +94,30 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  # config.action_mailer.smtp_settings = {
+  #   address: "smtp.gmail.com",
+  #   port: 587,
+  #   domain: "gmail.com",
+  #   user_name: ENV["SMTP_USERNAME"],
+  #   password: ENV["SMTP_PASSWORD"],
+  #   authentication: "plain",
+  #   enable_starttls_auto: true
+  # }
+
+    # Mailtrap API Configuration for Production (Live Sending)
+    config.action_mailer.raise_delivery_errors = true
+    config.action_mailer.perform_deliveries = true
+    config.action_mailer.delivery_method = :mailtrap
+    
+    # Set Mailtrap settings for production (NO inbox_id needed for live sending)
+    config.after_initialize do
+      ActionMailer::Base.mailtrap_settings = {
+        api_token: ENV['MAILTRAP_API_TOKEN'],
+        inbox_id: ENV['MAILTRAP_INBOX_ID'],
+        sandbox: false,  # Use production API for live sending (sends real emails)
+        category: 'production'  # Optional: categorize emails for analytics
+        # NOTE: inbox_id is NOT needed for production - only for sandbox/development
+      }
+    end
 end
