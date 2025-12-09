@@ -160,6 +160,8 @@ GEM
       net-imap
       net-pop
       net-smtp
+    mailtrap (2.5.0)
+      base64
     marcel (1.0.4)
     matrix (0.4.2)
     mini_mime (1.1.5)
@@ -324,6 +326,7 @@ DEPENDENCIES
   jbuilder
   jwt
   kaminari
+  mailtrap
   pg (~> 1.1)
   prawn
   prawn-table
