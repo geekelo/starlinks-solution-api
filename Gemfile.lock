@@ -206,7 +206,6 @@ GEM
     prettyprint (0.2.0)
     psych (5.2.3)
       date
-      stringio
     public_suffix (6.0.1)
     puma (6.6.0)
       nio4r (~> 2.0)
