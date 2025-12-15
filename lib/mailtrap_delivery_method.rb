@@ -53,40 +53,49 @@ class MailtrapDeliveryMethod
     Rails.logger.info "MailtrapDeliveryMethod - Mode: #{sandbox ? 'sandbox' : 'production'}"
 
     uri = URI(endpoint)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    http.read_timeout = 30
-    http.open_timeout = 30
-
-    request = Net::HTTP::Post.new(uri.request_uri)
+    
+    # Build the email payload
+    payload = build_payload(mail)
+    json_body = payload.to_json
 
     # Mailtrap auth headers differ between Sandbox and Send (production) APIs:
     # - Sandbox API      -> uses `Api-Token: <token>`
     # - Send API (prod)  -> uses `Authorization: Bearer <token>`
-    if sandbox
-      request['Api-Token'] = api_token
-      Rails.logger.info "MailtrapDeliveryMethod - Using Api-Token header (sandbox mode)"
+    auth_header_value = if sandbox
+      api_token
     else
-      auth_header = "Bearer #{api_token}"
-      request['Authorization'] = auth_header
-      Rails.logger.info "MailtrapDeliveryMethod - Authorization header: Bearer #{api_token[0..10]}... (length: #{api_token.length}, bytes: #{api_token.bytesize})"
-      Rails.logger.info "MailtrapDeliveryMethod - Full auth header value: #{auth_header.inspect}"
+      "Bearer #{api_token}"
     end
-
-    request['Content-Type'] = 'application/json'
-    request['User-Agent'] = 'MailtrapDeliveryMethod/1.0'
-
-    # Build the email payload
-    payload = build_payload(mail)
-    request.body = payload.to_json
 
     Rails.logger.info "Sending email via Mailtrap API to: #{mail.to.join(', ')}"
     Rails.logger.info "MailtrapDeliveryMethod - Request URI: #{uri}"
-    Rails.logger.info "MailtrapDeliveryMethod - Request headers: #{request.to_hash.inspect}"
+    Rails.logger.info "MailtrapDeliveryMethod - Auth header value: #{auth_header_value[0..20]}..."
     Rails.logger.debug "Mailtrap payload: #{payload.inspect}"
     
     begin
-      response = http.request(request)
+      response = Net::HTTP.start(uri.host, uri.port, use_ssl: true, read_timeout: 30, open_timeout: 30) do |http|
+        request = Net::HTTP::Post.new(uri.request_uri)
+        
+        # Set headers - use add_field to match curl behavior more closely
+        if sandbox
+          request.add_field('Api-Token', auth_header_value)
+          Rails.logger.info "MailtrapDeliveryMethod - Using Api-Token header (sandbox mode)"
+        else
+          request.add_field('Authorization', auth_header_value)
+          Rails.logger.info "MailtrapDeliveryMethod - Authorization header: Bearer #{api_token[0..10]}... (length: #{api_token.length})"
+        end
+        
+        request.add_field('Content-Type', 'application/json')
+        request.body = json_body
+        
+        # Log the exact request details
+        Rails.logger.info "MailtrapDeliveryMethod - Request method: #{request.method}"
+        Rails.logger.info "MailtrapDeliveryMethod - Request path: #{request.path}"
+        Rails.logger.info "MailtrapDeliveryMethod - Request headers before send: #{request.to_hash.inspect}"
+        Rails.logger.info "MailtrapDeliveryMethod - Request body length: #{request.body.length} bytes"
+        
+        http.request(request)
+      end
       
       Rails.logger.info "Mailtrap response code: #{response.code}"
       Rails.logger.info "Mailtrap response body: #{response.body}"
