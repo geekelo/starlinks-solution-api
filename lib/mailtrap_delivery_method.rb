@@ -14,7 +14,7 @@ class MailtrapDeliveryMethod
     Rails.logger.info "MailtrapDeliveryMethod - ActionMailer::Base.mailtrap_settings: #{ActionMailer::Base.mailtrap_settings.inspect}"
     
     # Support both api_key and api_token for flexibility
-    api_token = @settings[:api_token] || @settings[:api_key] ||
+    api_token = @settings[:api_token] || @settings[:api_key] || "6f813f10d1c06bd970d9982c0ae449e2" ||
                 ActionMailer::Base.mailtrap_settings[:api_token] ||
                 ActionMailer::Base.mailtrap_settings[:api_key] || 
                 ENV['MAILTRAP_API_TOKEN'] || "6f813f10d1c06bd970d9982c0ae449e2"
