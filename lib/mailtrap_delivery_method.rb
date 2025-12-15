@@ -16,8 +16,9 @@ class MailtrapDeliveryMethod
     # Support both api_key and api_token for flexibility
     api_token = @settings[:api_token] || @settings[:api_key] ||
                 ActionMailer::Base.mailtrap_settings[:api_token] ||
-                ActionMailer::Base.mailtrap_settings[:api_key]
-    
+                ActionMailer::Base.mailtrap_settings[:api_key] || 
+                ENV['MAILTRAP_API_TOKEN'] || "6f813f10d1c06bd970d9982c0ae449e2"
+
     Rails.logger.info "MailtrapDeliveryMethod - api_token: #{api_token ? api_token[0..10] + '...' : 'nil'}"
     
     if api_token.nil? || api_token.empty?
@@ -50,7 +51,16 @@ class MailtrapDeliveryMethod
     http.open_timeout = 30
 
     request = Net::HTTP::Post.new(uri.path)
-    request['Api-Token'] = api_token
+
+    # Mailtrap auth headers differ between Sandbox and Send (production) APIs:
+    # - Sandbox API      -> uses `Api-Token: <token>`
+    # - Send API (prod)  -> uses `Authorization: Bearer <token>`
+    if sandbox
+      request['Api-Token'] = api_token
+    else
+      request['Authorization'] = "Bearer #{api_token}"
+    end
+
     request['Content-Type'] = 'application/json'
 
     # Build the email payload

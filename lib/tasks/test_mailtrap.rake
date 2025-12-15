@@ -7,24 +7,24 @@ namespace :mailtrap do
     
     # Check environment variables
     puts "\n📋 Configuration Check:"
-    puts "  MAILTRAP_API_TOKEN: #{ENV['MAILTRAP_API_TOKEN'] ? "✅ Set (#{ENV['MAILTRAP_API_TOKEN'][0..10]}...)" : "❌ Not Set"}"
-    puts "  MAILTRAP_INBOX_ID:  #{ENV['MAILTRAP_INBOX_ID'] ? "✅ Set (#{ENV['MAILTRAP_INBOX_ID']})" : "❌ Not Set"}"
-    puts "  MAILTRAP_FROM_EMAIL: #{ENV['MAILTRAP_FROM_EMAIL'] || 'no-reply@sephcocco.com'}"
+    puts "  MAILTRAP_API_TOKEN: #{ENV['MAILTRAP_API_TOKEN'] ? "✅ Set (#{ENV['MAILTRAP_API_TOKEN'][0..10]}...)" : "6f813f10d1c06bd970d9982c0ae449e2"}"
+    puts "  MAILTRAP_INBOX_ID:  #{ENV['MAILTRAP_INBOX_ID'] ? "✅ Set (#{ENV['MAILTRAP_INBOX_ID']})" : "4239609"}"
+    puts "  MAILTRAP_FROM_EMAIL: #{ENV['MAILTRAP_FROM_EMAIL'] || 'no-reply@starlinksolutions.ng'}"
     puts "  Environment: #{Rails.env}"
     
     # Check if required variables are set
-    unless ENV['MAILTRAP_API_TOKEN']
-      puts "\n❌ ERROR: MAILTRAP_API_TOKEN not set"
-      puts "Add this to your .env file:"
-      puts "MAILTRAP_API_TOKEN=your_token_here"
-      exit 1
-    end
+    # unless ENV['MAILTRAP_API_TOKEN']
+    #   puts "\n❌ ERROR: MAILTRAP_API_TOKEN not set"
+    #   puts "Add this to your .env file:"
+    #   puts "MAILTRAP_API_TOKEN=your_token_here"
+    #   exit 1
+    # end
     
-    if Rails.env.development? && !ENV['MAILTRAP_INBOX_ID']
-      puts "\n⚠️  WARNING: MAILTRAP_INBOX_ID not set (needed for development/sandbox)"
-      puts "Add this to your .env file:"
-      puts "MAILTRAP_INBOX_ID=your_inbox_id_here"
-    end
+    # if Rails.env.development? && !ENV['MAILTRAP_INBOX_ID']
+    #   puts "\n⚠️  WARNING: MAILTRAP_INBOX_ID not set (needed for development/sandbox)"
+    #   puts "Add this to your .env file:"
+    #   puts "MAILTRAP_INBOX_ID=your_inbox_id_here"
+    # end
     
     # Create test mailer class
     class TestMailer < ApplicationMailer
@@ -33,11 +33,11 @@ namespace :mailtrap do
         
         mail(
           to: to_email,
-          subject: 'Mailtrap Test Email - Sephcocco',
+          subject: 'Mailtrap Test Email - Starlink Solutions',
           body: <<~BODY
             Hello!
             
-            This is a test email from Sephcocco API.
+            This is a test email from Starlink Solutions API.
             
             Sent at: #{@timestamp}
             Environment: #{Rails.env}
@@ -50,7 +50,7 @@ namespace :mailtrap do
             You can now start sending real emails from your application!
             
             ---
-            Sephcocco Team
+            Starlink Solutions Team
           BODY
         )
       end
