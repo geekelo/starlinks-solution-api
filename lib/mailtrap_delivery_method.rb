@@ -20,11 +20,19 @@ class MailtrapDeliveryMethod
                  ENV['MAILTRAP_API_TOKEN']).to_s.strip
 
     Rails.logger.info "MailtrapDeliveryMethod - api_token: #{api_token ? api_token[0..10] + '...' : 'nil'}"
+    Rails.logger.info "MailtrapDeliveryMethod - api_token length: #{api_token&.length}, bytes: #{api_token&.bytesize}, encoding: #{api_token&.encoding}"
+    Rails.logger.info "MailtrapDeliveryMethod - api_token inspect: #{api_token.inspect}"
     
     if api_token.nil? || api_token.empty?
       error_msg = "Mailtrap API token is required. Please set MAILTRAP_API_TOKEN environment variable."
       Rails.logger.error error_msg
       raise error_msg
+    end
+    
+    # Check for non-printable characters
+    if api_token.match?(/[^\x20-\x7E]/)
+      Rails.logger.warn "MailtrapDeliveryMethod - WARNING: Token contains non-printable characters!"
+      Rails.logger.warn "MailtrapDeliveryMethod - Token bytes: #{api_token.bytes.inspect}"
     end
 
     # Get settings from either direct settings or ActionMailer config
@@ -50,24 +58,31 @@ class MailtrapDeliveryMethod
     http.read_timeout = 30
     http.open_timeout = 30
 
-    request = Net::HTTP::Post.new(uri.path)
+    request = Net::HTTP::Post.new(uri.request_uri)
 
     # Mailtrap auth headers differ between Sandbox and Send (production) APIs:
     # - Sandbox API      -> uses `Api-Token: <token>`
     # - Send API (prod)  -> uses `Authorization: Bearer <token>`
     if sandbox
       request['Api-Token'] = api_token
+      Rails.logger.info "MailtrapDeliveryMethod - Using Api-Token header (sandbox mode)"
     else
-      request['Authorization'] = "Bearer #{api_token}"
+      auth_header = "Bearer #{api_token}"
+      request['Authorization'] = auth_header
+      Rails.logger.info "MailtrapDeliveryMethod - Authorization header: Bearer #{api_token[0..10]}... (length: #{api_token.length}, bytes: #{api_token.bytesize})"
+      Rails.logger.info "MailtrapDeliveryMethod - Full auth header value: #{auth_header.inspect}"
     end
 
     request['Content-Type'] = 'application/json'
+    request['User-Agent'] = 'MailtrapDeliveryMethod/1.0'
 
     # Build the email payload
     payload = build_payload(mail)
     request.body = payload.to_json
 
     Rails.logger.info "Sending email via Mailtrap API to: #{mail.to.join(', ')}"
+    Rails.logger.info "MailtrapDeliveryMethod - Request URI: #{uri}"
+    Rails.logger.info "MailtrapDeliveryMethod - Request headers: #{request.to_hash.inspect}"
     Rails.logger.debug "Mailtrap payload: #{payload.inspect}"
     
     begin
