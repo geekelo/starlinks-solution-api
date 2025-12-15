@@ -113,13 +113,13 @@ Rails.application.configure do
     config.action_mailer.default_options = { from: ENV.fetch('MAILTRAP_FROM_EMAIL', 'no-reply@starlinksolutions.ng') }
     
     # Set Mailtrap settings for production (NO inbox_id needed for live sending)
-    # config.after_initialize do
-    #   ActionMailer::Base.mailtrap_settings = {
-    #     api_token: "185c1992e1ccf5dc1118635d62889aec" || ENV['MAILTRAP_API_TOKEN'].to_s.strip,
-    #     inbox_id: ENV['MAILTRAP_INBOX_ID'],
-    #     sandbox: false,  # Use production API for live sending (sends real emails)
-    #     category: 'production'  # Optional: categorize emails for analytics
-    #     # NOTE: inbox_id is NOT needed for production - only for sandbox/development
-    #   }
-    # end
+    config.after_initialize do
+      ActionMailer::Base.mailtrap_settings = {
+        api_token: "185c1992e1ccf5dc1118635d62889aec" || ENV['MAILTRAP_API_TOKEN'].to_s.strip,
+        inbox_id: ENV['MAILTRAP_INBOX_ID'],
+        sandbox: false,  # Use production API for live sending (sends real emails)
+        category: 'production'  # Optional: categorize emails for analytics
+        # NOTE: inbox_id is NOT needed for production - only for sandbox/development
+      }
+    end
 end

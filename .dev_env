@@ -1,3 +1,10 @@
 JWT_SECRET_KEY=
 SMTP_USERNAME=
 SMTP_PASSWORD=
+
+# c7ee63f5813231700c4ab1551fe81b32
+
+export MAILTRAP_API_TOKEN="185c1992e1ccf5dc1118635d62889aec"
+export MAILTRAP_INBOX_ID="4239609"
+export MAILTRAP_FROM_EMAIL="billing@starlinksolutions.ng"
+export FRONTEND_URL="http://localhost:3000"
