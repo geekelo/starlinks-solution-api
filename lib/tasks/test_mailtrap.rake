@@ -7,8 +7,8 @@ namespace :mailtrap do
     
     # Check environment variables
     puts "\n📋 Configuration Check:"
-    puts "  MAILTRAP_API_TOKEN: #{ENV['MAILTRAP_API_TOKEN'] ? "✅ Set (#{ENV['MAILTRAP_API_TOKEN'][0..10]}...)" : "6f813f10d1c06bd970d9982c0ae449e2"}"
-    puts "  MAILTRAP_INBOX_ID:  #{ENV['MAILTRAP_INBOX_ID'] ? "✅ Set (#{ENV['MAILTRAP_INBOX_ID']})" : "4239609"}"
+    puts "  MAILTRAP_API_TOKEN: #{ENV['MAILTRAP_API_TOKEN'] ? "✅ Set (#{ENV['MAILTRAP_API_TOKEN'][0..10]}...)" : "⛔️No Token Set"}"
+    puts "  MAILTRAP_INBOX_ID:  #{ENV['MAILTRAP_INBOX_ID'] ? "✅ Set (#{ENV['MAILTRAP_INBOX_ID']})" : "⛔️No Inbox ID Set"}"
     puts "  MAILTRAP_FROM_EMAIL: #{ENV['MAILTRAP_FROM_EMAIL'] || 'no-reply@starlinksolutions.ng'}"
     puts "  Environment: #{Rails.env}"
     
