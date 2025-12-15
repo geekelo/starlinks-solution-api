@@ -114,7 +114,7 @@ Rails.application.configure do
     # Set Mailtrap settings for production (NO inbox_id needed for live sending)
     config.after_initialize do
       ActionMailer::Base.mailtrap_settings = {
-        api_token: ENV['MAILTRAP_API_TOKEN'],
+        api_key: ENV['MAILTRAP_API_TOKEN'],
         inbox_id: ENV['MAILTRAP_INBOX_ID'],
         sandbox: false,  # Use production API for live sending (sends real emails)
         category: 'production'  # Optional: categorize emails for analytics
