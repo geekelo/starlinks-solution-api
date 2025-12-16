@@ -123,7 +123,7 @@ Rails.application.configure do
     }
   end
   
-  config.action_mailer.default_url_options = { host: ENV['HOST'] || 'sephcocco.com.ng', protocol: 'https' }
-  config.action_mailer.default_options = { from: ENV.fetch('MAILTRAP_FROM_EMAIL', 'no-reply@sephcocco.com') }
+  config.action_mailer.default_url_options = { host: ENV['HOST'] || 'starlinksolutions.ng', protocol: 'https' }
+  config.action_mailer.default_options = { from: ENV.fetch('MAILTRAP_FROM_EMAIL', 'billing@starlinksolutions.ng') }
 
 end
