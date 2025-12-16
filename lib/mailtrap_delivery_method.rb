@@ -16,8 +16,9 @@ class MailtrapDeliveryMethod
     # Support both api_key and api_token for flexibility
     api_token = @settings[:api_token] || @settings[:api_key] ||
                 ActionMailer::Base.mailtrap_settings[:api_token] ||
-                ActionMailer::Base.mailtrap_settings[:api_key]
-    
+                ActionMailer::Base.mailtrap_settings[:api_key] || 
+                ENV['MAILTRAP_API_TOKEN']
+                
     Rails.logger.info "MailtrapDeliveryMethod - api_token: #{api_token ? api_token[0..10] + '...' : 'nil'}"
     
     if api_token.nil? || api_token.empty?
