@@ -50,7 +50,8 @@ class MailtrapDeliveryMethod
     http.read_timeout = 30
     http.open_timeout = 30
 
-    request = Net::HTTP::Post.new(uri.path)
+    # Use request_uri to include full path (handles query strings if any)
+    request = Net::HTTP::Post.new(uri.request_uri)
     request['Api-Token'] = api_token
     request['Content-Type'] = 'application/json'
 
@@ -59,6 +60,8 @@ class MailtrapDeliveryMethod
     request.body = payload.to_json
 
     Rails.logger.info "Sending email via Mailtrap API to: #{mail.to.join(', ')}"
+    Rails.logger.info "Mailtrap request URI: #{uri.request_uri}"
+    Rails.logger.info "Mailtrap request headers: Api-Token=#{api_token ? api_token[0..10] + '...' : 'nil'}, Content-Type=application/json"
     Rails.logger.debug "Mailtrap payload: #{payload.inspect}"
     
     begin
@@ -73,8 +76,18 @@ class MailtrapDeliveryMethod
         
         error_message = case response.code.to_i
         when 401
+          token_preview = api_token ? "#{api_token[0..10]}..." : "nil"
           "Mailtrap authentication failed (401 Unauthorized). " \
-          "Please verify your API token is correct and is a PRODUCTION token (not sandbox). " \
+          "Possible causes:\n" \
+          "1. API token is incorrect or invalid (token: #{token_preview})\n" \
+          "2. Using a SANDBOX token for PRODUCTION sending (sandbox tokens only work with sandbox.api.mailtrap.io)\n" \
+          "3. Sending domain not verified in Mailtrap account\n" \
+          "4. API token lacks required permissions\n" \
+          "5. Account or domain suspended\n" \
+          "Please verify:\n" \
+          "- Your API token is a PRODUCTION token (not sandbox) from Settings > API Tokens\n" \
+          "- The 'from' domain (#{mail.from.first&.split('@')&.last}) is verified in Email Sending > Sending Domains\n" \
+          "- The token has 'Send emails' permission enabled\n" \
           "Error: #{error_body['errors']&.join(', ') || error_body['message']}"
         when 403
           "Mailtrap access forbidden (403). Check your API token permissions. " \
