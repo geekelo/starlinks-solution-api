@@ -9,17 +9,11 @@ class MailtrapDeliveryMethod
   end
 
   def deliver!(mail)
-    # Debug logging
-    Rails.logger.info "MailtrapDeliveryMethod - @settings: #{@settings.inspect}"
-    Rails.logger.info "MailtrapDeliveryMethod - ActionMailer::Base.mailtrap_settings: #{ActionMailer::Base.mailtrap_settings.inspect}"
-    
     # Support both api_key and api_token for flexibility
     api_token = @settings[:api_token] || @settings[:api_key] ||
                 ActionMailer::Base.mailtrap_settings[:api_token] ||
                 ActionMailer::Base.mailtrap_settings[:api_key] || 
                 ENV['MAILTRAP_API_TOKEN']
-                
-    Rails.logger.info "MailtrapDeliveryMethod - api_token: #{api_token ? api_token[0..10] + '...' : 'nil'}"
     
     if api_token.nil? || api_token.empty?
       error_msg = "Mailtrap API token is required. Please set MAILTRAP_API_TOKEN environment variable."
@@ -57,11 +51,14 @@ class MailtrapDeliveryMethod
 
     # Build the email payload
     payload = build_payload(mail)
+    
+    # Log the FROM email - critical for debugging 401 errors
+    Rails.logger.info "Mailtrap FROM email being sent: #{payload.dig(:from, :email).inspect}"
+    
     request.body = payload.to_json
 
     Rails.logger.info "Sending email via Mailtrap API to: #{mail.to.join(', ')}"
     Rails.logger.info "Mailtrap request URI: #{uri.request_uri}"
-    Rails.logger.info "Mailtrap request headers: Api-Token=#{api_token ? api_token[0..10] + '...' : 'nil'}, Content-Type=application/json"
     Rails.logger.debug "Mailtrap payload: #{payload.inspect}"
     
     begin
