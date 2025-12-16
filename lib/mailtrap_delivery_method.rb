@@ -14,10 +14,13 @@ class MailtrapDeliveryMethod
     Rails.logger.info "MailtrapDeliveryMethod - ActionMailer::Base.mailtrap_settings: #{ActionMailer::Base.mailtrap_settings.inspect}"
     
     # Support both api_key and api_token for flexibility
-    api_token = (@settings[:api_token] || @settings[:api_key] ||
-                 ActionMailer::Base.mailtrap_settings[:api_token] ||
-                 ActionMailer::Base.mailtrap_settings[:api_key] ||
-                 ENV['MAILTRAP_API_TOKEN']).to_s.strip
+    # TEMPORARY: Hardcoded token for testing
+    api_token = '0aa4461bd01260d47b5e2057bbd4fb46'
+    # Original code (commented out for testing):
+    # api_token = (@settings[:api_token] || @settings[:api_key] ||
+    #             ActionMailer::Base.mailtrap_settings[:api_token] ||
+    #              ActionMailer::Base.mailtrap_settings[:api_key] ||
+    #              ENV['MAILTRAP_API_TOKEN']).to_s.strip 
 
     Rails.logger.info "MailtrapDeliveryMethod - api_token: #{api_token ? api_token[0..10] + '...' : 'nil'}"
     Rails.logger.info "MailtrapDeliveryMethod - api_token length: #{api_token&.length}, bytes: #{api_token&.bytesize}, encoding: #{api_token&.encoding}"
